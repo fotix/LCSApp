@@ -11,5 +11,5 @@ import retrofit.http.Query;
 public interface ApiServicesInterface {
 
     @GET("/news.json")
-    void getNews(@Query("limit") int limit, Callback<Response> callback);
+    void getNews(@Query("limit") int limit,@Query("offset")int offset, Callback<Response> callback);
 }

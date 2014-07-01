@@ -16,7 +16,7 @@ import retrofit.client.Response;
  * Created by Filipe Oliveira on 30-06-2014.
  */
 public class GenericCallback<T> implements Callback<T> {
-    protected static String TAG = "myCallbacks";
+    protected static String TAG = "lcscallbacks";
     private String requestId;
 
     public String requestId(){

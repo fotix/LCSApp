@@ -4,12 +4,14 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.trappz.lcsmashup.api.messages.EventBusManager;
 import com.trappz.lcsmashup.api.messages.ResponseNotification;
 import com.trappz.lcsmashup.api.models.News;
 import com.trappz.lcsmashup.api.responses.NewsResponseNotification;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,14 +30,14 @@ public class NewsCallback extends GenericCallback<Response> {
     @Override
     public void success(Response r, Response response) {
 
-        ResponseNotification<List<News>> notification = new NewsResponseNotification();
+        ResponseNotification<ArrayList<News>> notification = new NewsResponseNotification();
         notification.requestId = requestId();
         notification.origin = r;
 
         try {
             String theString = getStringFromInputStream(r
                     .getBody().in());
-            Log.d(TAG, theString);
+//            Log.d(TAG, theString);
 
             Gson gson = new Gson();
             Type mapType = new TypeToken<Map<String, News>>() {
@@ -44,13 +46,20 @@ public class NewsCallback extends GenericCallback<Response> {
                     .fromJson(theString, mapType);
 
             if (result != null) {
-                Log.d(TAG, result.size() + "");
+//                Log.d(TAG, result.size() + "");
+
+                  ArrayList<News> data = new ArrayList<News>();
                 for (String string : result.keySet()) {
-                    Log.d(TAG, string);
-                    System.out
-                            .println(result.get(string).getHeadline());
-                    Log.d(TAG, result.get(string).getBody());
+
+
+                        data.add(result.get(string));
+//                    Log.d(TAG, string);
+//                    System.out
+//                            .println(result.get(string).getHeadline());
+//                    Log.d(TAG, result.get(string).getBody());
                 }
+
+                notification.data = data;
             } else
                 Log.d(TAG, "bode");
 
@@ -58,6 +67,8 @@ public class NewsCallback extends GenericCallback<Response> {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
+        EventBusManager.post(notification);
 
     }
 }

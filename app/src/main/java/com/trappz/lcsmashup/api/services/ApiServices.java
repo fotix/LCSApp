@@ -1,6 +1,6 @@
 package com.trappz.lcsmashup.api.services;
 
-import com.trappz.lcsmashup.api.callbacks.*;
+import com.trappz.lcsmashup.api.callbacks.NewsCallback;
 
 import java.util.UUID;
 
@@ -25,14 +25,16 @@ public class ApiServices {
         return services;
     }
 
-    public static String getNews(int limit){
+    public static String getNews(int limit,int offset){
         String requestID = UUID.randomUUID().toString();
 
         ApiServicesInterface instance = getInstance();
 
-        instance.getNews(limit,new NewsCallback(requestID));
+        instance.getNews(limit,offset,new NewsCallback(requestID));
 
         return requestID;
     }
+
+
 
 }
