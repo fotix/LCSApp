@@ -1,12 +1,15 @@
 package com.trappz.lcsmashup.api.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by Filipe Oliveira on 30-06-2014.
  */
-public class News {
+public class News implements Parcelable {
 
     private String id;
     private String headline;
@@ -135,4 +138,13 @@ public class News {
         this.additionalProperties.put(name, value);
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
 }

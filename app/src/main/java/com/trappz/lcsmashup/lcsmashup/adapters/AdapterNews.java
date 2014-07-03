@@ -60,7 +60,7 @@ public class AdapterNews extends BaseAdapter {
             holder = new Holder();
             holder.background = (ImageView) convertView.findViewById(R.id.newsBackground);
             holder.headline = (TextView) convertView.findViewById(R.id.newsHeadline);
-            holder.nutgraf = (TextView) convertView.findViewById(R.id.newsNutgraf);
+//            holder.nutgraf = (TextView) convertView.findViewById(R.id.newsNutgraf);
 
             convertView.setTag(holder);
         }else
@@ -69,9 +69,10 @@ public class AdapterNews extends BaseAdapter {
         }
 
         holder.headline.setText(newsList.get(position).getHeadline());
-        holder.nutgraf.setText(newsList.get(position).getNutgraf());
+//        holder.nutgraf.setText(newsList.get(position).getNutgraf());
 
-        if(!newsList.get(position).getTaxonomyId().equals("20")) {
+
+        if(!newsList.get(position).getImageUrl().equals(" ")) {
             Picasso.with(context).load(newsList.get(position).getImageUrl()).into(holder.background);
         }else
             Picasso.with(context).load(R.drawable.default_background).into(holder.background);

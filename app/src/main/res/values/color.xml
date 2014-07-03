@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="actionbar" type="color">#3b000000</item>
+    <item name="actionbar_tabs" type="color">#3b000000</item>
+    <item name="white" type="color">#FFFFFF</item>
+</resources>
