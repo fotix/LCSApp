@@ -1,6 +1,10 @@
 package com.trappz.lcsmashup.api.services;
 
+import android.util.Log;
+
+import com.trappz.lcsmashup.api.callbacks.GenericCallback;
 import com.trappz.lcsmashup.api.callbacks.NewsCallback;
+import com.trappz.lcsmashup.api.callbacks.ProgrammingWeekCallback;
 
 import java.util.UUID;
 
@@ -10,6 +14,8 @@ import retrofit.RestAdapter;
  * Created by Filipe Oliveira on 30-06-2014.
  */
 public class ApiServices {
+
+    private static String TAG = "ApiServices";
 
     private static String serverURL = "http://euw.lolesports.com:80/api/";
     private static ApiServicesInterface services;
@@ -36,5 +42,16 @@ public class ApiServices {
     }
 
 
+    public static String getProgrammingWeek(String date,String offset){
 
+        Log.e(TAG,"Call on API");
+
+        String requestID = UUID.randomUUID().toString();
+
+        ApiServicesInterface instance = getInstance();
+
+        instance.getProgrammingWeek(date,offset,new ProgrammingWeekCallback(requestID));
+
+        return requestID;
+    }
 }

@@ -19,7 +19,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.ActivityNewsDetail" />
+        <activity
+            android:name=".activities.ActivityNewsDetail"
+            android:theme="@style/AppTheme.TranslucentActionBar"
+         />
 
 
     </application>

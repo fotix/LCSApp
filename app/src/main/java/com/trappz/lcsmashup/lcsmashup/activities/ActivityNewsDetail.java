@@ -1,15 +1,11 @@
 package com.trappz.lcsmashup.lcsmashup.activities;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.os.Bundle;
-import android.test.ActivityUnitTestCase;
 import android.text.Html;
 import android.view.Window;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,7 +13,7 @@ import com.squareup.picasso.Picasso;
 import com.trappz.lcsmashup.api.models.News;
 import com.trappz.lcsmashup.lcsmashup.R;
 
-import org.w3c.dom.Text;
+import com.manuelpeinado.fadingactionbar.FadingActionBarHelper;
 
 /**
  * Created by Filipe Oliveira on 03-07-2014.
@@ -32,13 +28,14 @@ public class ActivityNewsDetail extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+//
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
-        ActionBar actionBar = getActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33222222")));
-        actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color.parseColor("#55222222")));
 
-        setContentView(R.layout.activity_news_detail);
+//        ActionBar actionBar = getActionBar();
+//        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33222222")));
+//        actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color.parseColor("#55222222")));
+//
+//        setContentView(R.layout.activity_news_detail);
 
 
         Bundle extras = getIntent().getExtras();
@@ -48,11 +45,20 @@ public class ActivityNewsDetail extends Activity{
 
         News n = (News) ActivityDashboard.newsList.get(index);
 
+
+        FadingActionBarHelper helper = new FadingActionBarHelper()
+                .actionBarBackground(new ColorDrawable(Color.parseColor("#222222")))
+                .headerLayout(R.layout.activity_newsdetail_header)
+                .contentLayout(R.layout.activity_newsdetail);
+        setContentView(helper.createView(this));
+        helper.initActionBar(this);
+
+
         body = (TextView) findViewById(R.id.activity_news_detail_body);
         headline = (TextView) findViewById(R.id.activity_news_detail_tv_headline);
         nutgraf = (TextView) findViewById(R.id.activity_news_detail_tv_nutgraf);
 
-        topImage = (ImageView) findViewById(R.id.activity_news_detail_topimage);
+        topImage = (ImageView) findViewById(R.id.image_header);
 
         if(!n.getImageUrl().equals(" "))
             Picasso.with(getApplicationContext()).load(n.getImageUrl()).into(topImage);
@@ -61,6 +67,9 @@ public class ActivityNewsDetail extends Activity{
 
         headline.setText(n.getHeadline());
         nutgraf.setText(n.getNutgraf());
+
+
+
 
     }
 }

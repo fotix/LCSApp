@@ -37,7 +37,6 @@ public class NewsCallback extends GenericCallback<Response> {
         try {
             String theString = getStringFromInputStream(r
                     .getBody().in());
-//            Log.d(TAG, theString);
 
             Gson gson = new Gson();
             Type mapType = new TypeToken<Map<String, News>>() {
@@ -46,17 +45,10 @@ public class NewsCallback extends GenericCallback<Response> {
                     .fromJson(theString, mapType);
 
             if (result != null) {
-//                Log.d(TAG, result.size() + "");
 
-                  ArrayList<News> data = new ArrayList<News>();
+                 ArrayList<News> data = new ArrayList<News>();
                 for (String string : result.keySet()) {
-
-
                         data.add(result.get(string));
-//                    Log.d(TAG, string);
-//                    System.out
-//                            .println(result.get(string).getHeadline());
-//                    Log.d(TAG, result.get(string).getBody());
                 }
 
                 notification.data = data;

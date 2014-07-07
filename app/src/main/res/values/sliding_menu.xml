@@ -1,0 +1,34 @@
+<resources>
+
+    <dimen name="sliding_menu_offset">60dp</dimen>
+    <dimen name="sliding_menu_shadow_width">15dp</dimen>
+    <dimen name="sliding_panel_item_height">55dp</dimen>
+    <dimen name="sliding_panel_item_icon_height">20dp</dimen>
+    <dimen name="sliding_panel_item_icon_maxwidth">22dp</dimen>
+    <dimen name="sliding_menu_items_text_left_margin">40dp</dimen>
+    <dimen name="sliding_menu_items_text_options_left_margin">80dp</dimen>
+    <dimen name="sliding_menu_items_icon_search_margin">20dp</dimen>
+    <dimen name="sliding_menu_items_icon_left_margin">40dp</dimen>
+
+    <color name="sliding_menu_pressed">#77FFFFFF</color>
+    <color name="sliding_menu_selected">#1EFFFFFF</color>
+    <color name="sliding_menu_normal">@android:color/transparent</color>
+    <color name="sliding_menu_search_normal">#F5F5F5</color>
+
+    <style name="sliding_menu_text_selected">
+
+<!--         <item name="android:textStyle">bold</item>
+ -->
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="sliding_menu_text_normal">
+        <item name="android:textColor">#CCFFFFFF</item>
+
+    </style>
+    
+       <color name="items_text_color">#FFFFFF</color>
+
+    <color name="items_text_color_light">#88FFFFFF</color>
+
+</resources>

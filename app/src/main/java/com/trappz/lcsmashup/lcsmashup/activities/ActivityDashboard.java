@@ -4,20 +4,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.squareup.otto.Subscribe;
 import com.trappz.lcsmashup.api.messages.EventBusManager;
+import com.trappz.lcsmashup.api.models.ProgrammingWeek;
 import com.trappz.lcsmashup.api.responses.NewsResponseNotification;
+import com.trappz.lcsmashup.api.responses.ProgrammingWeekResponseNotification;
 import com.trappz.lcsmashup.api.services.ApiServices;
 import com.trappz.lcsmashup.lcsmashup.C;
 import com.trappz.lcsmashup.lcsmashup.R;
@@ -34,12 +33,21 @@ public class ActivityDashboard extends Activity {
     ListView newsListview;
     public static ArrayList newsList = new ArrayList();
     AbsListView.OnScrollListener mScrollListener;
+    SlidingMenu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         EventBusManager.register(this);
+
+        if(getActionBar() != null)
+            getActionBar().setHomeButtonEnabled(true);
+
+        setupSlidingMenu();
+
+        ApiServices.getProgrammingWeek("02-07-2014","0000");
+
 
 
         newsList = new ArrayList();
@@ -48,6 +56,8 @@ public class ActivityDashboard extends Activity {
         newsListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
 
                 Intent i = new Intent(getApplicationContext(), ActivityNewsDetail.class);
                 i.putExtra("index",position);
@@ -80,6 +90,20 @@ public class ActivityDashboard extends Activity {
         newsListview.setAdapter(adapter);
     }
 
+    void setupSlidingMenu() {
+        menu = new SlidingMenu(this);
+        menu.setMode(SlidingMenu.LEFT);
+        menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+        menu.setShadowWidthRes(R.dimen.sliding_menu_shadow_width);
+        // menu.setShadowDrawable(R.drawable.shadow);
+        menu.setBehindOffsetRes(R.dimen.sliding_menu_offset);
+        menu.setFadeDegree(0.35f);
+        menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+        menu.setTouchModeBehind(SlidingMenu.TOUCHMODE_NONE);
+        menu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
+        menu.setMenu(R.layout.sliding_menu);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -89,7 +113,7 @@ public class ActivityDashboard extends Activity {
     }
 
     @Subscribe
-    public void processResponseNotification(NewsResponseNotification rn) {
+    public void processResponseNewsNotification(NewsResponseNotification rn) {
 
         isLoading = false;
         offset = offset+10;
@@ -99,6 +123,19 @@ public class ActivityDashboard extends Activity {
         Log.d(TAG,"Got a response notification");
     }
 
+    @Subscribe
+    public void processResponseProgrammingWeekNotification(ProgrammingWeekResponseNotification pwrn){
+
+        ProgrammingWeek p = pwrn.data;
+
+        if(p.getContainsMatch()){
+            //Get details from blocks
+        }else {
+            //show no matches layout
+        }
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -106,8 +143,17 @@ public class ActivityDashboard extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+
             return true;
         }
+
+        if(id == android.R.id.home)
+        {
+            menu.toggle();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
+
 }
