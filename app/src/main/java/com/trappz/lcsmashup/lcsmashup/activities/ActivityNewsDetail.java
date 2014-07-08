@@ -5,12 +5,13 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.trappz.lcsmashup.api.models.News;
+import com.trappz.lcsmashup.api.models.News.News;
 import com.trappz.lcsmashup.lcsmashup.R;
 
 import com.manuelpeinado.fadingactionbar.FadingActionBarHelper;
@@ -37,6 +38,7 @@ public class ActivityNewsDetail extends Activity{
 //
 //        setContentView(R.layout.activity_news_detail);
 
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -72,4 +74,19 @@ public class ActivityNewsDetail extends Activity{
 
 
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == android.R.id.home)
+        {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

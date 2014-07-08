@@ -3,7 +3,9 @@ package com.trappz.lcsmashup.api.services;
 import android.util.Log;
 
 import com.trappz.lcsmashup.api.callbacks.GenericCallback;
+import com.trappz.lcsmashup.api.callbacks.MatchCallback;
 import com.trappz.lcsmashup.api.callbacks.NewsCallback;
+import com.trappz.lcsmashup.api.callbacks.ProgrammingBlockCallback;
 import com.trappz.lcsmashup.api.callbacks.ProgrammingWeekCallback;
 
 import java.util.UUID;
@@ -44,13 +46,33 @@ public class ApiServices {
 
     public static String getProgrammingWeek(String date,String offset){
 
-        Log.e(TAG,"Call on API");
-
         String requestID = UUID.randomUUID().toString();
 
         ApiServicesInterface instance = getInstance();
 
         instance.getProgrammingWeek(date,offset,new ProgrammingWeekCallback(requestID));
+
+        return requestID;
+    }
+
+    public static String getProgrammingBlock(String id){
+
+        String requestID = UUID.randomUUID().toString();
+
+        ApiServicesInterface instance = getInstance();
+
+        instance.getProgrammingBlock(id,new ProgrammingBlockCallback(requestID));
+
+        return requestID;
+    }
+
+    public static String getMatch(String id){
+
+        String requestID = UUID.randomUUID().toString();
+
+        ApiServicesInterface instance =  getInstance();
+
+        instance.getMatch(id,new MatchCallback(requestID));
 
         return requestID;
     }

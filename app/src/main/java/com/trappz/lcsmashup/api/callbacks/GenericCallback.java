@@ -1,5 +1,7 @@
 package com.trappz.lcsmashup.api.callbacks;
 
+import android.util.Log;
+
 import com.trappz.lcsmashup.api.messages.EventBusManager;
 import com.trappz.lcsmashup.api.messages.ResponseNotification;
 
@@ -34,6 +36,8 @@ public class GenericCallback<T> implements Callback<T> {
         notification.error = error;
 
         EventBusManager.post(notification);
+
+        Log.e(TAG,"ERRO: "+error.getCause().getMessage());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.trappz.lcsmashup.api.models;
+package com.trappz.lcsmashup.api.models.News;
 
 import android.os.Parcel;
 import android.os.Parcelable;

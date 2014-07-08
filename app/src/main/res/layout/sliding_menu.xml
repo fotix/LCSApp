@@ -12,12 +12,13 @@
         android:background="@drawable/sl_sliding_menu_search" >
 
 
-        <View
+<!--        <View
             android:layout_width="fill_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
-            android:background="#CCCCCC" />
+            android:background="#CCCCCC" />-->
     </RelativeLayout>
+
 
 
     <RelativeLayout

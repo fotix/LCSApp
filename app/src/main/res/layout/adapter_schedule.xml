@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <LinearLayout
+
+        android:id="@+id/adapter_schedule_matchll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:padding="10dp"
+            android:id="@+id/adapter_schedule_iv_blueteam"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="70dp"
+            android:src="@drawable/default_background"
+            android:scaleType="centerCrop"
+            />
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/adapter_schedule_blueteam_name"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="0dp"
+                android:gravity="right"
+                android:text="Blue Team"/>
+
+            <TextView
+                android:id="@+id/adapter_schedule_score_blueteam"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="bottom"
+                android:text="11W - 2L"
+                />
+
+        </LinearLayout>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="VS"/>
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/adapter_schedule_redteam_name"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:gravity="right"
+            android:text="Red Team"/>
+
+        <TextView
+            android:id="@+id/adapter_schedule_score_redteam"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="bottom"
+            android:text="11W - 2L"
+            />
+
+    </LinearLayout>
+
+
+        <ImageView
+            android:padding="10dp"
+            android:id="@+id/adapter_schedule_iv_redteam"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="70dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_background"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/adapter_schedule_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/adapter_schedule_matchll"
+
+        android:text="DATE: "/>
+</RelativeLayout>

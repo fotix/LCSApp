@@ -13,7 +13,7 @@
     <color name="sliding_menu_pressed">#77FFFFFF</color>
     <color name="sliding_menu_selected">#1EFFFFFF</color>
     <color name="sliding_menu_normal">@android:color/transparent</color>
-    <color name="sliding_menu_search_normal">#F5F5F5</color>
+    <color name="sliding_menu_search_normal">#222222</color>
 
     <style name="sliding_menu_text_selected">
 

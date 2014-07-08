@@ -17,4 +17,11 @@ public interface ApiServicesInterface {
 
     @GET("/programmingWeek/{date}/{offset}.json")
     void getProgrammingWeek(@Path("date") String date,@Path("offset") String offset,Callback<Response> callback);
+
+    @GET("/programming/{id}.json")
+    void getProgrammingBlock(@Path("id") String id,Callback<Response> callback);
+
+    @GET("/match/{id}.json")
+    void getMatch(@Path("id") String id,Callback<Response> callback);
+
 }

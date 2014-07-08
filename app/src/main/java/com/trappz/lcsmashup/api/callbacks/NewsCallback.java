@@ -6,13 +6,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.trappz.lcsmashup.api.messages.EventBusManager;
 import com.trappz.lcsmashup.api.messages.ResponseNotification;
-import com.trappz.lcsmashup.api.models.News;
+import com.trappz.lcsmashup.api.models.News.News;
 import com.trappz.lcsmashup.api.responses.NewsResponseNotification;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import retrofit.client.Response;

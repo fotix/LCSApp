@@ -3,6 +3,8 @@ package com.trappz.lcsmashup.lcsmashup.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,8 +16,13 @@ import android.widget.ListView;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.squareup.otto.Subscribe;
 import com.trappz.lcsmashup.api.messages.EventBusManager;
-import com.trappz.lcsmashup.api.models.ProgrammingWeek;
+import com.trappz.lcsmashup.api.models.Match.Match;
+import com.trappz.lcsmashup.api.models.Match.PreviousGames;
+import com.trappz.lcsmashup.api.models.Programming.ProgrammingBlock;
+import com.trappz.lcsmashup.api.models.Programming.ProgrammingWeek;
+import com.trappz.lcsmashup.api.responses.MatchResponseNotification;
 import com.trappz.lcsmashup.api.responses.NewsResponseNotification;
+import com.trappz.lcsmashup.api.responses.ProgrammingBlockResponseNotification;
 import com.trappz.lcsmashup.api.responses.ProgrammingWeekResponseNotification;
 import com.trappz.lcsmashup.api.services.ApiServices;
 import com.trappz.lcsmashup.lcsmashup.C;
@@ -46,9 +53,9 @@ public class ActivityDashboard extends Activity {
 
         setupSlidingMenu();
 
-        ApiServices.getProgrammingWeek("02-07-2014","0000");
 
-
+        ApiServices.getProgrammingBlock("1787");
+        ApiServices.getMatch("2352");
 
         newsList = new ArrayList();
         newsListview = (ListView) findViewById(R.id.newsList);
@@ -102,6 +109,66 @@ public class ActivityDashboard extends Activity {
         menu.setTouchModeBehind(SlidingMenu.TOUCHMODE_NONE);
         menu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
         menu.setMenu(R.layout.sliding_menu);
+
+        View tvLayout = findViewById(R.id.sliding_menu_news);
+        tvLayout.setOnClickListener(new View.OnClickListener()
+        {
+
+            @Override
+            public void onClick(View v)
+            {
+
+                menu.toggle();
+
+                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
+                    {
+
+                        @Override
+                        public void run()
+                        {
+                            Intent i = new Intent(getApplicationContext(), ActivityDashboard.class);
+
+                            startActivity(i);
+                            finish();
+
+                        }
+                    }, 400);
+
+                }
+
+        });
+
+
+        View ll = findViewById(R.id.sliding_menu_wishlist);
+        ll.setOnClickListener(new View.OnClickListener()
+        {
+
+            @Override
+            public void onClick(View v)
+            {
+
+                menu.toggle();
+
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
+                {
+
+                    @Override
+                    public void run()
+                    {
+                        Intent i = new Intent(getApplicationContext(), ActivitySchedule.class);
+
+                        startActivity(i);
+
+
+                    }
+                }, 400);
+
+            }
+
+        });
+
+
+
     }
 
 
@@ -123,17 +190,6 @@ public class ActivityDashboard extends Activity {
         Log.d(TAG,"Got a response notification");
     }
 
-    @Subscribe
-    public void processResponseProgrammingWeekNotification(ProgrammingWeekResponseNotification pwrn){
-
-        ProgrammingWeek p = pwrn.data;
-
-        if(p.getContainsMatch()){
-            //Get details from blocks
-        }else {
-            //show no matches layout
-        }
-    }
 
 
     @Override

@@ -1,7 +1,6 @@
 package com.trappz.lcsmashup.lcsmashup.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.trappz.lcsmashup.api.models.News;
+import com.trappz.lcsmashup.api.models.News.News;
 import com.trappz.lcsmashup.lcsmashup.R;
 
 import java.util.ArrayList;
