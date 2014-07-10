@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/activity_schedule_lv"
-        android:background="#232323"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 
-</RelativeLayout>
+    <fragment android:name="com.trappz.lcsmashup.lcsmashup.fragments.FragmentScheduleBar"
+        android:id="@+id/fragment_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <fragment android:name="com.trappz.lcsmashup.lcsmashup.fragments.FragmentScheduleDay"
+        android:id="@+id/fragment_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+</LinearLayout>

@@ -37,7 +37,7 @@ public class GenericCallback<T> implements Callback<T> {
 
         EventBusManager.post(notification);
 
-        Log.e(TAG,"ERRO: "+error.getCause().getMessage());
+        Log.e(TAG,"ERRO: "+error.getMessage());
     }
 
     @Override

@@ -45,7 +45,7 @@ public class ApiServices {
 
 
     public static String getProgrammingWeek(String date,String offset){
-
+        Log.e(TAG,"GETTING PROGRAMMING WEEK");
         String requestID = UUID.randomUUID().toString();
 
         ApiServicesInterface instance = getInstance();

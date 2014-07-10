@@ -1,12 +1,14 @@
 package com.trappz.lcsmashup.lcsmashup.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -65,7 +67,9 @@ public class AdapterSchedule extends BaseAdapter {
             holder.RedLogo = (ImageView) convertView.findViewById(R.id.adapter_schedule_iv_redteam);
 
             holder.date = (TextView) convertView.findViewById(R.id.adapter_schedule_date);
+            holder.tournamentName = (TextView) convertView.findViewById(R.id.adapter_schedule_tournamentname);
 
+            holder.ll = (LinearLayout) convertView.findViewById(R.id.adapter_schedule_info);
 
             convertView.setTag(holder);
         }else
@@ -73,9 +77,22 @@ public class AdapterSchedule extends BaseAdapter {
             holder = (Holder) convertView.getTag();
         }
 
-        holder.BlueTeamName.setText(mList.get(position).getContestants().getBlue().getName());
-        holder.RedTeamName.setText(mList.get(position).getContestants().getRed().getName());
-        holder.date.setText(mList.get(position).getDateTime());
+        holder.BlueTeamName.setText(mList.get(position).getContestants().getBlue().getAcronym());
+        holder.RedTeamName.setText(mList.get(position).getContestants().getRed().getAcronym());
+
+        holder.tournamentName.setText(mList.get(position).getTournament().getName()
+                +" - Round "
+                +mList.get(position).getTournament().getRound());
+
+        holder.date.setText(mList.get(position).getDateTime().split("T")[1].split("Z")[0]);
+        holder.ll.setBackgroundColor(Color.parseColor(mList.get(position).getColor().replace("#","#33")));
+
+        holder.BlueScore.setText(mList.get(position).getContestants().getBlue().getWins()+"W - "+
+                                mList.get(position).getContestants().getBlue().getLosses()+"L");
+
+        holder.RedScore.setText(mList.get(position).getContestants().getRed().getWins()+"W - "+
+                mList.get(position).getContestants().getRed().getLosses()+"L");
+
 
         Picasso.with(context).load(C.BASE_URL+mList.get(position).getContestants().getBlue().getLogoURL()).into(holder.BlueLogo);
         Picasso.with(context).load(C.BASE_URL+mList.get(position).getContestants().getRed().getLogoURL()).into(holder.RedLogo);
@@ -86,7 +103,11 @@ public class AdapterSchedule extends BaseAdapter {
 
     static class Holder
     {
+        public LinearLayout ll;
+
         public TextView date;
+        public TextView tournamentName;
+
         public TextView BlueScore;
         public TextView RedScore;
         public TextView BlueTeamName;

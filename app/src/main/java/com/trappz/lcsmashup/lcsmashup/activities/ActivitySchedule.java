@@ -4,142 +4,98 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.format.Time;
 import android.util.Log;
-import android.widget.ListView;
 
-import com.squareup.otto.Subscribe;
-import com.trappz.lcsmashup.api.messages.EventBusManager;
-import com.trappz.lcsmashup.api.models.Match.Match;
-import com.trappz.lcsmashup.api.models.Programming.ProgrammingBlock;
-import com.trappz.lcsmashup.api.models.Programming.ProgrammingWeek;
-import com.trappz.lcsmashup.api.responses.MatchResponseNotification;
-import com.trappz.lcsmashup.api.responses.ProgrammingBlockResponseNotification;
-import com.trappz.lcsmashup.api.responses.ProgrammingWeekResponseNotification;
-import com.trappz.lcsmashup.api.services.ApiServices;
 import com.trappz.lcsmashup.lcsmashup.R;
-import com.trappz.lcsmashup.lcsmashup.adapters.AdapterSchedule;
+import com.trappz.lcsmashup.lcsmashup.fragments.FragmentScheduleBar;
+import com.trappz.lcsmashup.lcsmashup.fragments.FragmentScheduleDay;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
+
+import hirondelle.date4j.DateTime;
 
 /**
  * Created by Filipe Oliveira on 08-07-2014.
  *
  */
-public class ActivitySchedule extends Activity {
-    SimpleDateFormat  format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+public class ActivitySchedule extends Activity implements FragmentScheduleBar.OnDateChangedListener {
+    FragmentScheduleDay fDay;
+    FragmentScheduleBar fBar;
 
-    public String lastRequest = null;
 
-    public static String TAG = "lcsSchedule";
-    AdapterSchedule adapter;
-    ListView lv;
-    HashMap<String,ProgrammingBlock> BlockList;
-    ArrayList<Match> MatchList;
+    Date currentDate;
+    Calendar cal;
+
+    public static final String TAG= "ScheduleActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
-        EventBusManager.register(this);
 
-        BlockList = new HashMap<String, ProgrammingBlock>();
-        MatchList = new ArrayList<Match>();
+        fDay = (FragmentScheduleDay) getFragmentManager().findFragmentById(R.id.fragment_list);
 
-        lv = (ListView) findViewById(R.id.activity_schedule_lv);
+        fBar = (FragmentScheduleBar) getFragmentManager().findFragmentById(R.id.fragment_bar);
 
-        adapter = new AdapterSchedule(getApplicationContext(),MatchList);
 
-        lv.setAdapter(adapter);
+//
+//        TimeZone tz = TimeZone.getTimeZone("GMT");
+//
+//        format.setTimeZone(tz);
+//        String date = format.format(new Date());
 
-        Time t = new Time(Time.getCurrentTimezone());
-        t.setToNow();
-        String date = t.format("%d-%m-%Y");
-        Log.e(TAG,"CURRENT DATE: "+date);
+        cal = Calendar.getInstance();
+        currentDate = new Date();
 
-        ApiServices.getProgrammingWeek("02-07-2014", "0000");
+        Log.e(TAG, "CURRENT DATE: " + getDateAsString(currentDate));
+
+        fDay.setNewDate(getDateAsString(currentDate));
+        fBar.refreshDate(getDateAsString(currentDate),getDayOfWeek(currentDate));
     }
 
+    @Override
+    public void onNextDay() {
+        cal.add(Calendar.DAY_OF_MONTH,1);
+        currentDate = cal.getTime();
 
-    @Subscribe
-    public void processResponseProgrammingWeekNotification(ProgrammingWeekResponseNotification pwrn){
+        String newDate = getDateAsString(currentDate);
+        Log.i(TAG,"NEW DATE: "+newDate);
+        Log.i(TAG,"NEW DATE ISO: "+getDateAsStringISO(currentDate));
 
-        ProgrammingWeek p = pwrn.data;
-
-        if(p.getContainsMatch()){
-
-            for(int i = 0 ; i < p.getDays().get(0).getBlockIds().size() ; i++){
-                String aux = ApiServices.getProgrammingBlock(p.getDays().get(0).getBlockIds().get(i));
-                BlockList.put(aux , new ProgrammingBlock());
-            }
-        }else {
-            //show no matches layout
-        }
+        fBar.refreshDate(newDate,getDayOfWeek(currentDate));
+        fDay.setNewDate(newDate);
     }
 
-    @Subscribe
-    public void processResponseProgrammingBlockNotification(ProgrammingBlockResponseNotification pbrn){
-        ProgrammingBlock p = pbrn.data;
+    @Override
+    public void onPreviousDay() {
+        cal.add(Calendar.DAY_OF_MONTH,-1);
+        currentDate = cal.getTime();
+        String newDate = getDateAsString(currentDate);
 
-        if(p != null){
-            Log.e(TAG, p.getLabel());
-            BlockList.put(pbrn.requestId,p);
+        Log.i(TAG,"NEW DATE: "+newDate);
+        Log.i(TAG,"NEW DATE ISO: "+getDateAsStringISO(currentDate));
 
-            for(int i = 0 ; i<p.getMatches().size() ; i++){
-                lastRequest = ApiServices.getMatch(p.getMatches().get(i));
-
-            }
-
-        }
+        fBar.refreshDate(newDate,getDayOfWeek(currentDate));
+        fDay.setNewDate(newDate);
     }
 
-    @Subscribe
-    public void processResponseMatchNotification(MatchResponseNotification mrn){
-        Match m = mrn.data;
+    public static String getDateAsString(Date d){
 
-        if(m != null){
-            Log.w(TAG,m.getName());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String date = formatter.format(d);
+        return date;
+    }
 
-           MatchList.add(m);
-           Collections.sort(MatchList,new Comparator<Match>(){
+    public static String getDateAsStringISO(Date d){
+        SimpleDateFormat formatService = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+        String date = formatService.format(d);
+        return date;
+    }
 
-                public int compare(Match thisMatch, Match another) {
-
-                    try {
-                        Date thisMatchDate;
-                        Date anotherDate;
-
-                        thisMatchDate = format.parse(thisMatch.getDateTime());
-                        anotherDate = format.parse(another.getDateTime());
-
-                        Log.i(TAG,"COMPARING: "+thisMatchDate.toString()+"     -    "+anotherDate.toString());
-
-                        if(thisMatchDate.after(anotherDate))
-                            return 1;
-
-                        if(thisMatchDate.equals(anotherDate))
-                            return 0;
-
-                        if(thisMatchDate.before(anotherDate))
-                            return -1;
-
-                    } catch (ParseException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-
-                    return 0;
-                }
-           });
-
-
-            adapter.notifyDataSetChanged();
-
-        }else
-            Log.w(TAG,"Match is null ....");
+    public static String getDayOfWeek(Date d) {
+        SimpleDateFormat formater= new SimpleDateFormat("EEEE"); // the day of the week spelled out completely
+        String dayOfWeek = formater.format(d);
+        return dayOfWeek;
     }
 }

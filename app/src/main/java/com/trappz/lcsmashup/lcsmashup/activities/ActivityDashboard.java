@@ -54,8 +54,8 @@ public class ActivityDashboard extends Activity {
         setupSlidingMenu();
 
 
-        ApiServices.getProgrammingBlock("1787");
-        ApiServices.getMatch("2352");
+//        ApiServices.getProgrammingBlock("1787");
+//        ApiServices.getMatch("2352");
 
         newsList = new ArrayList();
         newsListview = (ListView) findViewById(R.id.newsList);

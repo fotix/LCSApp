@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#222222"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/fragment_bar_previous"
+        android:gravity="center|left"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="@dimen/action_bar_height"
+        android:clickable="true"
+        android:background="@drawable/sl_sliding_menu_section"
+        android:src="@drawable/left_arrow"
+        />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="50dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/fragment_bar_date"
+            android:layout_width="fill_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:text="CURRENT DATE"/>
+
+        <TextView
+            android:id="@+id/fragment_bar_dayofweek"
+            android:layout_width="fill_parent"
+            android:layout_weight="1"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="Monday"/>
+        </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/fragment_bar_next"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center|right"
+        android:clickable="true"
+        android:src="@drawable/right_arrow"
+        android:background="@drawable/sl_sliding_menu_section"
+        android:layout_height="@dimen/action_bar_height"
+        />
+
+</LinearLayout>

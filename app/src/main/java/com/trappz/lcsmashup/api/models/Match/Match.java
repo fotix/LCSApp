@@ -15,7 +15,15 @@ import java.util.Map;
  */
 public class Match {
 
+    public String getColor() {
+        return color;
+    }
 
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    private String color;
     private Tournament tournament;
     private String url;
     private String dateTime;

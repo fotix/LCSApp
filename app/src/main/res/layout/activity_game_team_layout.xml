@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_game_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/activity_game_topll">
+
+    <LinearLayout
+        android:id="@+id/activity_game_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:layout_weight="2"
+            android:text="Player" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="K/D/A" />
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Items" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="CS" />
+    </LinearLayout>
+
+    <include
+        android:id="@+id/activity_game_player1"
+        layout="@layout/activity_game_player" />
+
+    <include
+        android:id="@+id/activity_game_player2"
+        layout="@layout/activity_game_player" />
+
+    <include
+        android:id="@+id/activity_game_player3"
+        layout="@layout/activity_game_player" />
+
+    <include
+        android:id="@+id/activity_game_player4"
+        layout="@layout/activity_game_player" />
+
+    <include
+        android:id="@+id/activity_game_player5"
+        layout="@layout/activity_game_player" />
+
+</TableLayout>
+

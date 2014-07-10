@@ -3,10 +3,39 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp">
+    android:padding="10dp"
+    >
+
 
     <LinearLayout
+        android:id="@+id/adapter_schedule_info"
 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/adapter_schedule_tournamentname"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:gravity="center|left"
+            android:text="LeagueName"/>
+
+
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/adapter_schedule_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center|right"
+            android:text="DATE: "/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/adapter_schedule_info"
         android:id="@+id/adapter_schedule_matchll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_weight="1"
                 android:layout_height="0dp"
-                android:gravity="right"
+                android:gravity="left|center"
                 android:text="Blue Team"/>
 
             <TextView
@@ -40,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="bottom"
+                android:gravity="center|left"
                 android:text="11W - 2L"
                 />
 
@@ -49,8 +78,9 @@
     <TextView
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center"
+        android:textStyle="bold"
         android:text="VS"/>
 
     <LinearLayout
@@ -64,7 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_weight="1"
             android:layout_height="0dp"
-            android:gravity="right"
+            android:gravity="right|center"
             android:text="Red Team"/>
 
         <TextView
@@ -72,7 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="bottom"
+            android:gravity="center|right"
             android:text="11W - 2L"
             />
 
@@ -91,11 +121,7 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/adapter_schedule_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/adapter_schedule_matchll"
 
-        android:text="DATE: "/>
+
+
 </RelativeLayout>
