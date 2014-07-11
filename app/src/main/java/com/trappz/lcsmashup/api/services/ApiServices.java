@@ -2,6 +2,7 @@ package com.trappz.lcsmashup.api.services;
 
 import android.util.Log;
 
+import com.trappz.lcsmashup.api.callbacks.GameCallback;
 import com.trappz.lcsmashup.api.callbacks.GenericCallback;
 import com.trappz.lcsmashup.api.callbacks.MatchCallback;
 import com.trappz.lcsmashup.api.callbacks.NewsCallback;
@@ -73,6 +74,16 @@ public class ApiServices {
         ApiServicesInterface instance =  getInstance();
 
         instance.getMatch(id,new MatchCallback(requestID));
+
+        return requestID;
+    }
+
+    public static String getGame(String id){
+        String requestID = UUID.randomUUID().toString();
+
+        ApiServicesInterface instance = getInstance();
+
+        instance.getGame(id,new GameCallback(requestID));
 
         return requestID;
     }

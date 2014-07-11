@@ -19,14 +19,14 @@ public class Player {
     private Integer endLevel;
     private Integer minionsKilled;
     private Integer totalGold;
-    private String spell012;
-    private String spell14;
-    private String items03111;
-    private String items13211;
-    private String items21011;
-    private String items32049;
-    private String items43068;
-    private String items53082;
+//    private String spell012;
+//    private String spell14;
+//    private String items03111;
+//    private String items13211;
+//    private String items21011;
+//    private String items32049;
+//    private String items43068;
+//    private String items53082;
     private Integer championId;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -118,69 +118,69 @@ public class Player {
         this.totalGold = totalGold;
     }
 
-    public String getSpell012() {
-        return spell012;
-    }
-
-    public void setSpell012(String spell012) {
-        this.spell012 = spell012;
-    }
-
-    public String getSpell14() {
-        return spell14;
-    }
-
-    public void setSpell14(String spell14) {
-        this.spell14 = spell14;
-    }
-
-    public String getItems03111() {
-        return items03111;
-    }
-
-    public void setItems03111(String items03111) {
-        this.items03111 = items03111;
-    }
-
-    public String getItems13211() {
-        return items13211;
-    }
-
-    public void setItems13211(String items13211) {
-        this.items13211 = items13211;
-    }
-
-    public String getItems21011() {
-        return items21011;
-    }
-
-    public void setItems21011(String items21011) {
-        this.items21011 = items21011;
-    }
-
-    public String getItems32049() {
-        return items32049;
-    }
-
-    public void setItems32049(String items32049) {
-        this.items32049 = items32049;
-    }
-
-    public String getItems43068() {
-        return items43068;
-    }
-
-    public void setItems43068(String items43068) {
-        this.items43068 = items43068;
-    }
-
-    public String getItems53082() {
-        return items53082;
-    }
-
-    public void setItems53082(String items53082) {
-        this.items53082 = items53082;
-    }
+//    public String getSpell012() {
+//        return spell012;
+//    }
+//
+//    public void setSpell012(String spell012) {
+//        this.spell012 = spell012;
+//    }
+//
+//    public String getSpell14() {
+//        return spell14;
+//    }
+//
+//    public void setSpell14(String spell14) {
+//        this.spell14 = spell14;
+//    }
+//
+//    public String getItems03111() {
+//        return items03111;
+//    }
+//
+//    public void setItems03111(String items03111) {
+//        this.items03111 = items03111;
+//    }
+//
+//    public String getItems13211() {
+//        return items13211;
+//    }
+//
+//    public void setItems13211(String items13211) {
+//        this.items13211 = items13211;
+//    }
+//
+//    public String getItems21011() {
+//        return items21011;
+//    }
+//
+//    public void setItems21011(String items21011) {
+//        this.items21011 = items21011;
+//    }
+//
+//    public String getItems32049() {
+//        return items32049;
+//    }
+//
+//    public void setItems32049(String items32049) {
+//        this.items32049 = items32049;
+//    }
+//
+//    public String getItems43068() {
+//        return items43068;
+//    }
+//
+//    public void setItems43068(String items43068) {
+//        this.items43068 = items43068;
+//    }
+//
+//    public String getItems53082() {
+//        return items53082;
+//    }
+//
+//    public void setItems53082(String items53082) {
+//        this.items53082 = items53082;
+//    }
 
     public Integer getChampionId() {
         return championId;

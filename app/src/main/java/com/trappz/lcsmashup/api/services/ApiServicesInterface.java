@@ -1,5 +1,7 @@
 package com.trappz.lcsmashup.api.services;
 
+import com.trappz.lcsmashup.api.models.Game.Game;
+
 import retrofit.Callback;
 import retrofit.client.Response;
 import retrofit.http.GET;
@@ -24,4 +26,6 @@ public interface ApiServicesInterface {
     @GET("/match/{id}.json")
     void getMatch(@Path("id") String id,Callback<Response> callback);
 
+    @GET("/game/{id}.json")
+    void getGame(@Path("id") String id,Callback<Response> callback);
 }

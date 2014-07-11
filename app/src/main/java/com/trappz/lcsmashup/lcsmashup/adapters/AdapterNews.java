@@ -12,6 +12,8 @@ import com.squareup.picasso.Picasso;
 import com.trappz.lcsmashup.api.models.News.News;
 import com.trappz.lcsmashup.lcsmashup.R;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 /**
@@ -72,7 +74,11 @@ public class AdapterNews extends BaseAdapter {
 
 
         if(!newsList.get(position).getImageUrl().equals(" ")) {
-            Picasso.with(context).load(newsList.get(position).getImageUrl()).into(holder.background);
+            try {
+                Picasso.with(context).load(URLDecoder.decode(newsList.get(position).getImageUrl(), "UTF-8")).into(holder.background);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }else
             Picasso.with(context).load(R.drawable.default_background).into(holder.background);
 

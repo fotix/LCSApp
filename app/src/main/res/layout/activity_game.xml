@@ -3,123 +3,164 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:background="#222222"
+    android:orientation="vertical">
 
-    <LinearLayout
 
-        android:id="@+id/activity_game_topll"
-        android:layout_width="match_parent"
+
+    <com.google.android.youtube.player.YouTubePlayerView
+        android:id="@+id/youtube_view"
+
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        />
 
-        <ImageView
-            android:id="@+id/activity_game_iv_blueteam"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:layout_weight="1"
-            android:padding="10dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/default_background" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/activity_game_blueteam_name"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="left|center"
-                android:text="Blue Team" />
-
-            <TextView
-                android:id="@+id/activity_game_score_blueteam"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center|left"
-                android:text="11W - 2L" />
-
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="VS"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/activity_game_redteam_name"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="right|center"
-                android:text="Red Team" />
-
-            <TextView
-                android:id="@+id/activity_game_score_redteam"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center|right"
-                android:text="11W - 2L" />
-
-        </LinearLayout>
-
-
-        <ImageView
-            android:id="@+id/activity_game_iv_redteam"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:layout_weight="1"
-            android:padding="10dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/default_background" />
-
-    </LinearLayout>
-    
     <ScrollView
-        android:layout_below="@+id/activity_game_topll"
+        android:layout_below="@+id/youtube_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
-
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/activity_game_topll"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <include
-                    android:id="@+id/activity_game_blueteam"
-                    layout="@layout/activity_game_team_layout" />
+                <ImageView
+                    android:id="@+id/activity_game_iv_blueteam"
+                    android:layout_width="0dp"
+                    android:layout_height="70dp"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/default_background" />
 
-                <include
-                    android:id="@+id/activity_game_redteam"
-                    layout="@layout/activity_game_team_layout" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/activity_game_blueteam_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:textColor="#FFFFFF"
+                        android:gravity="left|center"
+                        android:text="Blue Team" />
+
+                    <TextView
+                        android:id="@+id/activity_game_score_blueteam"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:textColor="#FFFFFF"
+                        android:gravity="center|left"
+                        android:text="11W - 2L" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="VS"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/activity_game_redteam_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:textColor="#FFFFFF"
+                        android:gravity="right|center"
+                        android:text="Red Team" />
+
+                    <TextView
+                        android:id="@+id/activity_game_score_redteam"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:textColor="#FFFFFF"
+                        android:gravity="center|right"
+                        android:text="11W - 2L" />
+
+                </LinearLayout>
+
+
+                <ImageView
+                    android:id="@+id/activity_game_iv_redteam"
+                    android:layout_width="0dp"
+                    android:layout_height="70dp"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/default_background" />
+
             </LinearLayout>
 
 
+            <FrameLayout
+                android:id="@+id/activity_game_details"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/activity_game_topll">
 
-        </FrameLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
+                    <include
+                        android:id="@+id/activity_game_blueteam"
+                        layout="@layout/activity_game_team_layout" />
+
+                    <include
+                        android:id="@+id/activity_game_redteam"
+                        layout="@layout/activity_game_team_layout" />
+                </LinearLayout>
+
+
+            </FrameLayout>
+        </RelativeLayout>
     </ScrollView>
 
+    <TextView
+        android:id="@+id/activity_game_no_games"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="This game will be played on"
+        android:visibility="invisible" />
 
+
+    <RelativeLayout
+        android:id="@+id/activity_game_loadinglayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#222222">
+
+        <ProgressBar
+            android:id="@+id/activity_game_progressbar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            />
+
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -19,8 +19,19 @@ public class Game {
     private Integer gameLength;
     private String matchId;
     private Tournament tournament;
-    private Vods vods;
+
     private MatchContestants contestants;
+
+    @SerializedName("vods")
+    private Vods VODs;
+
+    public Vods getVods() {
+        return VODs;
+    }
+
+    public void setVods(Vods vods) {
+        this.VODs = vods;
+    }
 
     public Map<String, Player> getPlayers() {
         return players;
@@ -92,13 +103,6 @@ public class Game {
         this.tournament = tournament;
     }
 
-    public Vods getVods() {
-        return vods;
-    }
-
-    public void setVods(Vods vods) {
-        this.vods = vods;
-    }
 
     public MatchContestants getContestants() {
         return contestants;

@@ -76,9 +76,15 @@ public class AdapterSchedule extends BaseAdapter {
         {
             holder = (Holder) convertView.getTag();
         }
+        if(!mList.get(position).getContestants().getBlue().getAcronym().isEmpty())
+            holder.BlueTeamName.setText(mList.get(position).getContestants().getBlue().getAcronym());
+        else
+            holder.BlueTeamName.setText(mList.get(position).getContestants().getBlue().getName());
 
-        holder.BlueTeamName.setText(mList.get(position).getContestants().getBlue().getAcronym());
-        holder.RedTeamName.setText(mList.get(position).getContestants().getRed().getAcronym());
+        if(!(mList.get(position).getContestants().getRed().getAcronym().isEmpty()))
+             holder.RedTeamName.setText(mList.get(position).getContestants().getRed().getAcronym());
+        else
+            holder.RedTeamName.setText(mList.get(position).getContestants().getRed().getName());
 
         holder.tournamentName.setText(mList.get(position).getTournament().getName()
                 +" - Round "
