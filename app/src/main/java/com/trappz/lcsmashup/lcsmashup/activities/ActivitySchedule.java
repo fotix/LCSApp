@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.trappz.lcsmashup.lcsmashup.R;
 import com.trappz.lcsmashup.lcsmashup.fragments.FragmentScheduleBar;
@@ -19,13 +20,13 @@ import hirondelle.date4j.DateTime;
  * Created by Filipe Oliveira on 08-07-2014.
  *
  */
-public class ActivitySchedule extends Activity implements FragmentScheduleBar.OnDateChangedListener {
+public class ActivitySchedule extends SuperActivity implements FragmentScheduleBar.OnDateChangedListener, FragmentScheduleDay.OnLoadingStateChanged{
     FragmentScheduleDay fDay;
     FragmentScheduleBar fBar;
 
 
-    Date currentDate;
-    Calendar cal;
+    public static Date currentDate;
+    private static Calendar cal = null;
 
     public static final String TAG= "ScheduleActivity";
 
@@ -38,16 +39,20 @@ public class ActivitySchedule extends Activity implements FragmentScheduleBar.On
 
         fBar = (FragmentScheduleBar) getFragmentManager().findFragmentById(R.id.fragment_bar);
 
+        if(getActionBar() != null)
+            getActionBar().setHomeButtonEnabled(true);
 
-//
-//        TimeZone tz = TimeZone.getTimeZone("GMT");
-//
-//        format.setTimeZone(tz);
-//        String date = format.format(new Date());
+//        setupSlidingMenu();
 
-        cal = Calendar.getInstance();
-        currentDate = new Date();
 
+        if(cal == null){
+            cal = Calendar.getInstance();
+            Log.i(TAG,"Creating new Calendar instance");
+        }
+
+        if(currentDate == null) {
+            currentDate = new Date();
+        }
         Log.e(TAG, "CURRENT DATE: " + getDateAsString(currentDate));
 
         fDay.setNewDate(getDateAsString(currentDate));
@@ -71,6 +76,8 @@ public class ActivitySchedule extends Activity implements FragmentScheduleBar.On
     public void onPreviousDay() {
         cal.add(Calendar.DAY_OF_MONTH,-1);
         currentDate = cal.getTime();
+
+
         String newDate = getDateAsString(currentDate);
 
         Log.i(TAG,"NEW DATE: "+newDate);
@@ -97,5 +104,24 @@ public class ActivitySchedule extends Activity implements FragmentScheduleBar.On
         SimpleDateFormat formater= new SimpleDateFormat("EEEE"); // the day of the week spelled out completely
         String dayOfWeek = formater.format(d);
         return dayOfWeek;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if(id == android.R.id.home)
+        {
+            this.toggleMenu();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void setLoading(boolean value) {
+        fBar.setLoading(value);
     }
 }

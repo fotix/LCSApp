@@ -22,7 +22,7 @@ import org.w3c.dom.Text;
 public class FragmentScheduleBar extends Fragment{
     ImageView previous,next;
     TextView date,dayofweek;
-
+    Boolean isLoading = false;
     OnDateChangedListener mDateListener;
 
     @Override
@@ -40,14 +40,16 @@ public class FragmentScheduleBar extends Fragment{
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDateListener.onPreviousDay();
+                if(!isLoading)
+                    mDateListener.onPreviousDay();
             }
         });
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDateListener.onNextDay();
+                if(!isLoading)
+                    mDateListener.onNextDay();
             }
         });
 
@@ -68,6 +70,9 @@ public class FragmentScheduleBar extends Fragment{
         }
     }
 
+    public void setLoading(boolean value){
+        isLoading = value;
+    }
 
     public void refreshDate(String date,String dayOfWeek) {
         this.date.setText(date);

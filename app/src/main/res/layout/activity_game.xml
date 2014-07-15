@@ -11,11 +11,12 @@
     <com.google.android.youtube.player.YouTubePlayerView
         android:id="@+id/youtube_view"
 
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
 
     <ScrollView
+        android:id="@+id/activity_game_scrollview"
         android:layout_below="@+id/youtube_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -61,7 +62,7 @@
                         android:layout_weight="1"
                         android:textColor="#FFFFFF"
                         android:gravity="center|left"
-                        android:text="11W - 2L" />
+                        android:text="0W - 0L" />
 
                 </LinearLayout>
 
@@ -96,7 +97,7 @@
                         android:layout_weight="1"
                         android:textColor="#FFFFFF"
                         android:gravity="center|right"
-                        android:text="11W - 2L" />
+                        android:text="0W - 0L" />
 
                 </LinearLayout>
 

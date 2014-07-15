@@ -37,6 +37,7 @@
     <LinearLayout
         android:layout_below="@+id/adapter_schedule_info"
         android:id="@+id/adapter_schedule_matchll"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -47,8 +48,10 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="70dp"
+            android:layout_marginRight="5dp"
+            android:adjustViewBounds="true"
             android:src="@drawable/default_background"
-            android:scaleType="centerCrop"
+
             />
         <LinearLayout
             android:layout_weight="1"
@@ -58,15 +61,16 @@
 
             <TextView
                 android:id="@+id/adapter_schedule_blueteam_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:layout_height="0dp"
                 android:gravity="left|center"
+                android:singleLine="true"
                 android:text="Blue Team"/>
 
             <TextView
                 android:id="@+id/adapter_schedule_score_blueteam"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center|left"
@@ -91,15 +95,16 @@
 
         <TextView
             android:id="@+id/adapter_schedule_redteam_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_height="0dp"
+            android:singleLine="true"
             android:gravity="right|center"
             android:text="Red Team"/>
 
         <TextView
             android:id="@+id/adapter_schedule_score_redteam"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center|right"
@@ -115,7 +120,8 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="70dp"
-            android:scaleType="centerCrop"
+            android:layout_marginLeft="5dp"
+            android:adjustViewBounds="true"
             android:src="@drawable/default_background"
             />
 

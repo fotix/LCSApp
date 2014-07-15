@@ -24,12 +24,12 @@ public class AdapterNews extends BaseAdapter {
     ArrayList<News> newsList;
     Context context;
 
-    public AdapterNews(){
+    public AdapterNews() {
         newsList = null;
         context = null;
     }
 
-    public AdapterNews(Context context, ArrayList<News> newsList){
+    public AdapterNews(Context context, ArrayList<News> newsList) {
         this.context = context;
         this.newsList = newsList;
     }
@@ -54,9 +54,9 @@ public class AdapterNews extends BaseAdapter {
 
         Holder holder = null;
 
-        if(convertView == null){
+        if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.adapter_newslist,parent,false);
+            convertView = inflater.inflate(R.layout.adapter_newslist, parent, false);
 
             holder = new Holder();
             holder.background = (ImageView) convertView.findViewById(R.id.newsBackground);
@@ -64,8 +64,7 @@ public class AdapterNews extends BaseAdapter {
 //            holder.nutgraf = (TextView) convertView.findViewById(R.id.newsNutgraf);
 
             convertView.setTag(holder);
-        }else
-        {
+        } else {
             holder = (Holder) convertView.getTag();
         }
 
@@ -73,20 +72,17 @@ public class AdapterNews extends BaseAdapter {
 //        holder.nutgraf.setText(newsList.get(position).getNutgraf());
 
 
-        if(!newsList.get(position).getImageUrl().equals(" ")) {
-            try {
-                Picasso.with(context).load(URLDecoder.decode(newsList.get(position).getImageUrl(), "UTF-8")).into(holder.background);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }else
-            Picasso.with(context).load(R.drawable.default_background).into(holder.background);
+        if (!newsList.get(position).getImageUrl().equals(" ")) {
+
+            Picasso.with(context).load(newsList.get(position).getImageUrl()).into(holder.background);
+
+        } else
+            Picasso.with(context).load(R.drawable.news_placeholder).into(holder.background);
 
         return convertView;
     }
 
-    static class Holder
-    {
+    static class Holder {
         public TextView headline;
         public TextView nutgraf;
         public ImageView background;

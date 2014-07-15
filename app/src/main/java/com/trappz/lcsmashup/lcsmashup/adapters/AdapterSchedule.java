@@ -76,15 +76,51 @@ public class AdapterSchedule extends BaseAdapter {
         {
             holder = (Holder) convertView.getTag();
         }
-        if(!mList.get(position).getContestants().getBlue().getAcronym().isEmpty())
-            holder.BlueTeamName.setText(mList.get(position).getContestants().getBlue().getAcronym());
-        else
-            holder.BlueTeamName.setText(mList.get(position).getContestants().getBlue().getName());
+        if(mList.get(position).getContestants() != null) {
+            if (!mList.get(position).getContestants().getBlue().getAcronym().isEmpty())
+                holder.BlueTeamName.setText(mList.get(position).getContestants().getBlue().getAcronym());
+            else
+                holder.BlueTeamName.setText(mList.get(position).getContestants().getBlue().getName());
 
-        if(!(mList.get(position).getContestants().getRed().getAcronym().isEmpty()))
-             holder.RedTeamName.setText(mList.get(position).getContestants().getRed().getAcronym());
-        else
-            holder.RedTeamName.setText(mList.get(position).getContestants().getRed().getName());
+            if (!(mList.get(position).getContestants().getRed().getAcronym().isEmpty()))
+                holder.RedTeamName.setText(mList.get(position).getContestants().getRed().getAcronym());
+            else
+                holder.RedTeamName.setText(mList.get(position).getContestants().getRed().getName());
+
+
+            holder.BlueScore.setText(mList.get(position).getContestants().getBlue().getWins()+"W - "+
+                    mList.get(position).getContestants().getBlue().getLosses()+"L");
+
+            holder.RedScore.setText(mList.get(position).getContestants().getRed().getWins()+"W - "+
+                    mList.get(position).getContestants().getRed().getLosses()+"L");
+
+            if(mList.get(position).getWinnerId().equals(mList.get(position).getContestants().getBlue().getId()))
+            {
+                //Blue Team wins
+//                holder.BlueLogo.setBackgroundColor(Color.parseColor("#22FFBB33"));
+//                holder.RedLogo.setBackgroundColor(Color.parseColor("#00FFFFFF"));
+
+                holder.BlueLogo.setBackground(context.getResources().getDrawable(R.drawable.winner_border));
+                holder.RedLogo.setBackground(null);
+            }else
+            {
+                holder.RedLogo.setBackground(context.getResources().getDrawable(R.drawable.winner_border));
+                holder.BlueLogo.setBackground(null);
+
+//                holder.RedLogo.setBackgroundColor(Color.parseColor("#22FFBB33"));
+//                holder.BlueLogo.setBackgroundColor(Color.parseColor("#00FFFFFF"));
+            }
+            Picasso.with(context).load(C.BASE_URL+mList.get(position).getContestants().getBlue().getLogoURL()).into(holder.BlueLogo);
+            Picasso.with(context).load(C.BASE_URL+mList.get(position).getContestants().getRed().getLogoURL()).into(holder.RedLogo);
+        }else
+        {
+            holder.BlueTeamName.setText("TBD");
+            holder.RedTeamName.setText("TBD");
+
+            holder.BlueScore.setText("0W - 0L");
+            holder.RedScore.setText("0W - 0L");
+        }
+
 
         holder.tournamentName.setText(mList.get(position).getTournament().getName()
                 +" - Round "
@@ -93,15 +129,8 @@ public class AdapterSchedule extends BaseAdapter {
         holder.date.setText(mList.get(position).getDateTime().split("T")[1].split("Z")[0]);
         holder.ll.setBackgroundColor(Color.parseColor(mList.get(position).getColor().replace("#","#33")));
 
-        holder.BlueScore.setText(mList.get(position).getContestants().getBlue().getWins()+"W - "+
-                                mList.get(position).getContestants().getBlue().getLosses()+"L");
-
-        holder.RedScore.setText(mList.get(position).getContestants().getRed().getWins()+"W - "+
-                mList.get(position).getContestants().getRed().getLosses()+"L");
 
 
-        Picasso.with(context).load(C.BASE_URL+mList.get(position).getContestants().getBlue().getLogoURL()).into(holder.BlueLogo);
-        Picasso.with(context).load(C.BASE_URL+mList.get(position).getContestants().getRed().getLogoURL()).into(holder.RedLogo);
 
 
         return convertView;

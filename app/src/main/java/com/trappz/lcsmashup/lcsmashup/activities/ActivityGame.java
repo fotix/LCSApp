@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -26,6 +28,8 @@ import com.squareup.picasso.Picasso;
 import com.trappz.lcsmashup.api.messages.EventBusManager;
 import com.trappz.lcsmashup.api.models.Game.Game;
 import com.trappz.lcsmashup.api.models.Game.Player;
+import com.trappz.lcsmashup.api.models.Game.Vod;
+import com.trappz.lcsmashup.api.models.Game.Vods;
 import com.trappz.lcsmashup.api.models.Match.Match;
 import com.trappz.lcsmashup.api.responses.GameResponseNotification;
 import com.trappz.lcsmashup.api.responses.ProgrammingBlockResponseNotification;
@@ -58,11 +62,15 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
     YouTubePlayerView youTubeView;
     TextView noGames;
     FrameLayout matchDetailsLayout;
+    ScrollView scrollView;
+
     private RelativeLayout loading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         loading = (RelativeLayout)findViewById(R.id.activity_game_loadinglayout);
@@ -74,7 +82,7 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
 
         youTubeView  = (YouTubePlayerView)findViewById(R.id.youtube_view);
 
-
+        scrollView = (ScrollView) findViewById(R.id.activity_game_scrollview);
 
 
         noGames = (TextView) findViewById(R.id.activity_game_no_games);
@@ -96,21 +104,29 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
         LinearLayout r =  (LinearLayout) redteam.findViewById(R.id.activity_game_header);
         r.setBackgroundColor(Color.parseColor("#FF4444"));
 
-        if (!m.getContestants().getBlue().getAcronym().isEmpty())
-            BlueTeamName.setText(m.getContestants().getBlue().getAcronym());
-        else
-            BlueTeamName.setText(m.getContestants().getBlue().getName());
+        if(m.getContestants() != null) {
+            if (!m.getContestants().getBlue().getAcronym().isEmpty())
+                BlueTeamName.setText(m.getContestants().getBlue().getAcronym());
+            else
+                BlueTeamName.setText(m.getContestants().getBlue().getName());
 
-        if (!(m.getContestants().getRed().getAcronym().isEmpty()))
-            RedTeamName.setText(m.getContestants().getRed().getAcronym());
-        else
-            RedTeamName.setText(m.getContestants().getRed().getName());
+            if (!(m.getContestants().getRed().getAcronym().isEmpty()))
+                RedTeamName.setText(m.getContestants().getRed().getAcronym());
+            else
+                RedTeamName.setText(m.getContestants().getRed().getName());
 
-        Picasso.with(getApplicationContext()).load(C.BASE_URL + m.getContestants().getBlue().getLogoURL()).into(BlueLogo);
-        Picasso.with(getApplicationContext()).load(C.BASE_URL + m.getContestants().getRed().getLogoURL()).into(RedLogo);
 
-        Log.e("LCSGAME", m.getName());
+            BlueScore.setText(m.getContestants().getBlue().getWins()+"W - "+
+                    m.getContestants().getBlue().getLosses()+"L");
 
+            RedScore.setText(m.getContestants().getRed().getWins()+"W - "+
+                    m.getContestants().getRed().getLosses()+"L");
+
+            Picasso.with(getApplicationContext()).load(C.BASE_URL + m.getContestants().getBlue().getLogoURL()).into(BlueLogo);
+            Picasso.with(getApplicationContext()).load(C.BASE_URL + m.getContestants().getRed().getLogoURL()).into(RedLogo);
+
+            Log.e("LCSGAME", m.getName());
+        }
         if (m.getIsFinished().compareToIgnoreCase("0") == 0) {
             matchDetailsLayout.setVisibility(View.INVISIBLE);
             loading.setVisibility(View.GONE);
@@ -125,6 +141,18 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
     }
 
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == android.R.id.home)
+        {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider,
@@ -158,8 +186,13 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
         Game g = grn.data;
 
         if(g.getNoVods() == 0) {
-               vodUrl= g.getVods().getVod().getURL().split("v=")[1];
+            Vods v = g.getVods();
+            if(v!=null){
+               vodUrl= v.getVod().getURL().split("v=")[1];
                youTubeView.initialize("AIzaSyCAHG2RhyRuOIFJCo5purXDxwO57FPJSn0", this);
+
+            }else
+                youTubeView.setVisibility(View.GONE);
         }
 
         processGameData(g);
@@ -251,7 +284,6 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
                 pkda.setText("-/-/-");
 
             counter++;
-
         }
 
         loading.setVisibility(View.GONE);

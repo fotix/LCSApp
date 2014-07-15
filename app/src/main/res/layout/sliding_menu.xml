@@ -9,14 +9,20 @@
         android:id="@+id/sliding_menu_search"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/action_bar_height"
-        android:background="@drawable/sl_sliding_menu_search" >
+        android:background="@color/sliding_menu_noclick_background" >
 
-
-<!--        <View
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Select Option"
+            android:textColor="@color/items_text_color"
+            android:textSize="18sp"
+            android:gravity="center"/>
+        <View
             android:layout_width="fill_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
-            android:background="#CCCCCC" />-->
+            android:background="#CCCCCC" />
     </RelativeLayout>
 
 
@@ -38,7 +44,7 @@
             android:layout_centerVertical="true"
             android:adjustViewBounds="true"
             android:maxWidth="@dimen/sliding_panel_item_icon_maxwidth"
-            android:src="@drawable/select_source_icon" />
+            />
 
         <TextView
             android:layout_width="fill_parent"
@@ -54,12 +60,11 @@
 
 
     <RelativeLayout
-        android:layout_below="@+id/sliding_menu_news"
+        android:layout_below="@+id/sliding_menu_schedule"
         android:id="@+id/sliding_menu_source"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/sliding_panel_item_height"
-
-        android:background="@drawable/sl_sliding_menu_section"
+        android:background="@color/sliding_menu_noclick_background"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/sliding_menu_items_icon_left_margin"
         android:paddingRight="@dimen/sliding_menu_items_icon_left_margin" >
@@ -70,14 +75,14 @@
             android:layout_centerVertical="true"
             android:adjustViewBounds="true"
             android:maxWidth="@dimen/sliding_panel_item_icon_maxwidth"
-            android:src="@drawable/select_source_icon" />
+             />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/sliding_menu_items_text_left_margin"
-            android:text="Select Region"
+            android:text="Standings"
             android:textColor="@color/items_text_color"
             android:textSize="18sp"
         />
@@ -146,10 +151,10 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/sliding_menu_wishlist"
+        android:id="@+id/sliding_menu_schedule"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/sliding_panel_item_height"
-        android:layout_below="@+id/sliding_menu_source_options"
+        android:layout_below="@+id/sliding_menu_news"
         android:background="@drawable/sl_sliding_menu_section"
         android:orientation="horizontal"
         android:clickable="true"
@@ -162,7 +167,7 @@
             android:layout_centerVertical="true"
             android:adjustViewBounds="true"
             android:maxWidth="@dimen/sliding_panel_item_icon_maxwidth"
-            android:src="@drawable/wishlist_icon" />
+             />
 
         <TextView
             android:layout_width="fill_parent"
@@ -175,11 +180,11 @@
            />
     </RelativeLayout>
 
-    <RelativeLayout
+ <!--   <RelativeLayout
         android:id="@+id/sliding_menu_social"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/sliding_panel_item_height"
-        android:layout_below="@+id/sliding_menu_wishlist"
+        android:layout_below="@+id/sliding_menu_schedule"
         android:background="@drawable/sl_sliding_menu_section"
         android:clickable="true"
         android:orientation="horizontal"
@@ -192,7 +197,7 @@
             android:layout_centerVertical="true"
             android:adjustViewBounds="true"
             android:maxWidth="@dimen/sliding_panel_item_icon_maxwidth"
-            android:src="@drawable/social_icon" />
+             />
 
         <TextView
             android:layout_width="fill_parent"
@@ -203,9 +208,9 @@
             android:textColor="@color/items_text_color"
             android:textSize="18sp"
              />
-    </RelativeLayout>
+    </RelativeLayout>-->
 
-    <RelativeLayout
+  <!--  <RelativeLayout
         android:id="@+id/sliding_menu_configuration"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/sliding_panel_item_height"
@@ -233,9 +238,9 @@
             android:text="Configuration"
             android:textSize="18sp"
              />
-    </RelativeLayout>
+    </RelativeLayout>-->
 
-    <RelativeLayout
+   <!-- <RelativeLayout
         android:id="@+id/sliding_menu_logout_layout"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/sliding_panel_item_height"
@@ -252,7 +257,7 @@
             android:layout_centerVertical="true"
             android:adjustViewBounds="true"
             android:maxWidth="@dimen/sliding_panel_item_icon_maxwidth"
-            android:src="@drawable/logout" />
+             />
 
         <TextView
             android:layout_width="fill_parent"
@@ -263,7 +268,7 @@
             android:textColor="@color/items_text_color"
             android:textSize="18sp"
             />
-    </RelativeLayout>
+    </RelativeLayout>-->
 
     <View
         android:layout_width="30dp"
