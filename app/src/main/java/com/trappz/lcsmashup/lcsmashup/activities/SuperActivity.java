@@ -29,11 +29,12 @@ public abstract class SuperActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+        menu = new SlidingMenu(this);
     }
 
 
     public void setupSlidingMenu() {
-        menu = new SlidingMenu(this);
+
         menu.setMode(SlidingMenu.LEFT);
         menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
         menu.setShadowWidthRes(R.dimen.sliding_menu_shadow_width);
@@ -94,20 +95,6 @@ public abstract class SuperActivity extends Activity {
         });
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-            if (menu.isMenuShowing()) {
-                menu.toggle();
-                return true;
-            }
-
-        }
-
-        return super.onKeyDown(keyCode, event);
-    }
 
 
     public void toggleMenu() {

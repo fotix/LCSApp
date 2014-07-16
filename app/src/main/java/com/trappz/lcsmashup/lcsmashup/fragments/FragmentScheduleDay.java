@@ -25,6 +25,7 @@ import com.trappz.lcsmashup.api.responses.ProgrammingBlockResponseNotification;
 import com.trappz.lcsmashup.api.responses.ProgrammingWeekResponseNotification;
 import com.trappz.lcsmashup.api.services.ApiServices;
 import com.trappz.lcsmashup.lcsmashup.R;
+import com.trappz.lcsmashup.lcsmashup.Utils.TimeZones;
 import com.trappz.lcsmashup.lcsmashup.activities.ActivityGame;
 import com.trappz.lcsmashup.lcsmashup.activities.ActivitySchedule;
 import com.trappz.lcsmashup.lcsmashup.adapters.AdapterSchedule;
@@ -51,12 +52,16 @@ public class FragmentScheduleDay extends Fragment {
 
     public static String TAG = "lcsSchedule";
     public static AdapterSchedule adapter;
+
+    String currentTimeZone = "0000";
+    TimeZones ctz = TimeZones.GMT;
+
     ListView lv;
     TextView noMatches;
     RelativeLayout loadingLayout;
-    HashMap<String,ProgrammingBlock> BlockList;
+    HashMap<String, ProgrammingBlock> BlockList;
     public static ArrayList<Match> MatchList;
-    public static HashMap<String,Boolean> MatchIdList;
+    public static HashMap<String, Boolean> MatchIdList;
 
     @Override
     public void onAttach(Activity activity) {
@@ -83,6 +88,7 @@ public class FragmentScheduleDay extends Fragment {
         MatchList = new ArrayList<Match>();
         MatchIdList = new HashMap<String, Boolean>();
 
+        setTimeZone(TimeZones.GMT);
 
         lv = (ListView) v.findViewById(R.id.activity_schedule_lv);
 
@@ -91,7 +97,7 @@ public class FragmentScheduleDay extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getActivity().getApplicationContext(), ActivityGame.class);
 
-                i.putExtra("index",position);
+                i.putExtra("index", position);
 
                 startActivity(i);
             }
@@ -100,7 +106,7 @@ public class FragmentScheduleDay extends Fragment {
         loadingLayout = (RelativeLayout) v.findViewById(R.id.fragment_schedule_loadinglayout);
         noMatches = (TextView) v.findViewById(R.id.fragment_schedule_day_nomatches);
 
-        adapter = new AdapterSchedule(getActivity().getApplicationContext(),MatchList);
+        adapter = new AdapterSchedule(getActivity().getApplicationContext(), MatchList);
 
         lv.setAdapter(adapter);
 
@@ -111,7 +117,9 @@ public class FragmentScheduleDay extends Fragment {
     public void onPause() {
 
         super.onPause();
-        EventBusManager.unregister(this);
+
+            EventBusManager.unregister(this);
+
 
     }
 
@@ -119,34 +127,95 @@ public class FragmentScheduleDay extends Fragment {
     public void onResume() {
 
         super.onResume();
+
         EventBusManager.register(this);
+
     }
 
-    public void setNewDate(String date){
+    public void setNewDate(String date) {
 
         MatchList.clear();
         MatchIdList.clear();
         loadingLayout.setVisibility(View.VISIBLE);
         adapter.notifyDataSetChanged();
 
+
 //        loadingState.setLoading(true);
-        ApiServices.getProgrammingWeek(date, "0000");
+        ApiServices.getProgrammingWeek(date, currentTimeZone);
+
+        Log.i(TAG, "Programming week: " + date + " - " + currentTimeZone);
 
     }
 
+    public void setTimeZone(TimeZones tz) {
+
+        ctz = tz;
+
+        switch (tz) {
+            case PDT:
+                currentTimeZone = "-0700";
+                break;
+            case EDT:
+                currentTimeZone = "-0400";
+                break;
+            case GMT:
+                currentTimeZone = "0000";
+                break;
+            case CEST:
+                currentTimeZone = "0200";
+                break;
+            case IST:
+                currentTimeZone = "0530";
+                break;
+            case KST:
+                currentTimeZone = "0900";
+                break;
+            case AEST:
+                currentTimeZone = "1100";
+                break;
+        }
+    }
+
+    public String getTimeZone(TimeZones t) {
+        switch (t) {
+            case PDT:
+                return "-07:00";
+
+            case EDT:
+                return "-04:00";
+
+            case GMT:
+                return "00:00";
+
+            case CEST:
+                return "02:00";
+
+            case IST:
+                return "05:30";
+
+            case KST:
+                return "09:00";
+
+            case AEST:
+                return "11:00";
+
+        }
+
+        return "00:00";
+    }
 
     @Subscribe
-    public void processResponseProgrammingWeekNotification(ProgrammingWeekResponseNotification pwrn){
+    public void processResponseProgrammingWeekNotification(ProgrammingWeekResponseNotification pwrn) {
 
         ProgrammingWeek p = pwrn.data;
 
-        if(p.getDays().get(0).getBlockNum() > 0){
+        if (p.getDays().get(0).getBlockNum() > 0) {
             noMatches.setVisibility(View.INVISIBLE);
-            for(int i = 0 ; i < p.getDays().get(0).getBlockIds().size() ; i++){
+            for (int i = 0; i < p.getDays().get(0).getBlockIds().size(); i++) {
                 String aux = ApiServices.getProgrammingBlock(p.getDays().get(0).getBlockIds().get(i));
-                BlockList.put(aux , new ProgrammingBlock());
+                BlockList.put(aux, new ProgrammingBlock());
             }
-        }else {
+        } else {
             loadingLayout.setVisibility(View.INVISIBLE);
             noMatches.setVisibility(View.VISIBLE);
 //            loadingState.setLoading(false);
@@ -154,50 +223,59 @@ public class FragmentScheduleDay extends Fragment {
     }
 
     @Subscribe
-    public void processResponseProgrammingBlockNotification(ProgrammingBlockResponseNotification pbrn){
+    public void processResponseProgrammingBlockNotification(ProgrammingBlockResponseNotification pbrn) {
         ProgrammingBlock p = pbrn.data;
 
-        if(p != null){
+        if (p != null) {
             Log.e(TAG, p.getLabel());
-            BlockList.put(p.getTournamentId(),p);
+            BlockList.put(p.getTournamentId(), p);
 
-            for(int i = 0 ; i<p.getMatches().size() ; i++){
+            for (int i = 0; i < p.getMatches().size(); i++) {
                 lastRequest = ApiServices.getMatch(p.getMatches().get(i));
-                MatchIdList.put(lastRequest,false);
+                MatchIdList.put(lastRequest, false);
             }
 
         }
     }
-    private boolean sameDay(Date d1, Date d2){
+
+    private boolean sameDay(Date d1, Date d2) {
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
         cal1.setTime(d1);
         cal2.setTime(d2);
-       return (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+        return (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
                 cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
     }
+
     @Subscribe
-    public void processResponseMatchNotification(MatchResponseNotification mrn){
+    public void processResponseMatchNotification(MatchResponseNotification mrn) {
         Match m = mrn.data;
         Date matchDate = new Date();
         try {
-             matchDate = format.parse(m.getDateTime());
+            matchDate = format.parse(m.getDateTime());
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(matchDate);
 
+            String s = getTimeZone(ctz);
+
+            calendar.add(Calendar.HOUR, Integer.valueOf(s.split(":")[0]));
+            calendar.add(Calendar.MINUTE, Integer.valueOf(s.split(":")[1]));
+
+            Date d = calendar.getTime();
+
+            m.setDateTime(ActivitySchedule.getDateAsStringISO(d));
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
 
-        if(!sameDay(matchDate,ActivitySchedule.currentDate)){
+        if (!sameDay(matchDate, ActivitySchedule.currentDate)) {
             Log.i(TAG, m.getName() + " - " + m.getDateTime() + "   NOT the current date");
-            MatchIdList.put(mrn.requestId,true);
-
+            MatchIdList.put(mrn.requestId, true);
             checkLoadingState();
-
             return;
-        }else
-        {
-            Log.i(TAG,m.getName()+" - "+m.getDateTime()+"   IS the current date");
+        } else {
+            Log.i(TAG, m.getName() + " - " + m.getDateTime() + "   IS the current date");
         }
 
 /*        if(!ActivitySchedule.getDayOfWeek(matchDate).equals(ActivitySchedule.getDayOfWeek(ActivitySchedule.currentDate)))
@@ -205,14 +283,14 @@ public class FragmentScheduleDay extends Fragment {
             return;
         }*/
 
-        if(m != null){
-            Log.w(TAG,m.getName() +"    "+m.getMatchId()+"   "+m.getResult().get("game0").getId());
+        if (m != null) {
+            Log.w(TAG, m.getName() + "    " + m.getMatchId() + "   " + m.getResult().get("game0").getId());
 
             m.setColor(BlockList.get(m.getTournament().getId()).getLeagueColor());
 
 
             MatchList.add(m);
-            MatchIdList.put(mrn.requestId,true);
+            MatchIdList.put(mrn.requestId, true);
             Collections.sort(MatchList, new Comparator<Match>() {
 
                 public int compare(Match thisMatch, Match another) {
@@ -236,7 +314,7 @@ public class FragmentScheduleDay extends Fragment {
                             return -1;
 
                     } catch (ParseException e) {
-                       e.printStackTrace();
+                        e.printStackTrace();
                     }
                     return 0;
                 }
@@ -246,9 +324,8 @@ public class FragmentScheduleDay extends Fragment {
             adapter.notifyDataSetChanged();
 
 
-
-        }else {
-            MatchIdList.put(mrn.requestId,true);
+        } else {
+            MatchIdList.put(mrn.requestId, true);
             Log.w(TAG, "Match is null ....");
         }
 
@@ -258,21 +335,21 @@ public class FragmentScheduleDay extends Fragment {
     }
 
 
-    public void checkLoadingState(){
+    public void checkLoadingState() {
         boolean endLoading = true;
 
-        for(String requestID: MatchIdList.keySet()){
-            if(!MatchIdList.get(requestID))
+        for (String requestID : MatchIdList.keySet()) {
+            if (!MatchIdList.get(requestID))
                 endLoading = false;
         }
 
-        if(endLoading){
+        if (endLoading) {
             loadingLayout.setVisibility(View.INVISIBLE);
 //                loadingState.setLoading(false);
         }
     }
 
-    public interface OnLoadingStateChanged{
+    public interface OnLoadingStateChanged {
         public void setLoading(boolean value);
     }
 }

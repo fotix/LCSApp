@@ -4,9 +4,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.trappz.lcsmashup.lcsmashup.R;
+import com.trappz.lcsmashup.lcsmashup.Utils.TimeZones;
 import com.trappz.lcsmashup.lcsmashup.fragments.FragmentScheduleBar;
 import com.trappz.lcsmashup.lcsmashup.fragments.FragmentScheduleDay;
 
@@ -62,6 +66,7 @@ public class ActivitySchedule extends SuperActivity implements FragmentScheduleB
     @Override
     public void onNextDay() {
         cal.add(Calendar.DAY_OF_MONTH,1);
+
         currentDate = cal.getTime();
 
         String newDate = getDateAsString(currentDate);
@@ -106,18 +111,73 @@ public class ActivitySchedule extends SuperActivity implements FragmentScheduleB
         return dayOfWeek;
     }
 
+
+/*    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_schedule, menu);
+        return super.onCreateOptionsMenu(menu);
+    }*/
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        int id = item.getItemId();
 
-        if(id == android.R.id.home)
-        {
-            this.toggleMenu();
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.toggleMenu();
+                return true;
+
+            case R.id.tz_pdt:
+                item.setChecked(true);
+                fDay.setTimeZone(TimeZones.PDT);
+                break;
+            case R.id.tz_edt:
+                item.setChecked(true);
+                fDay.setTimeZone(TimeZones.EDT);
+                break;
+            case R.id.tz_gmt:
+                item.setChecked(true);
+                fDay.setTimeZone(TimeZones.GMT);
+                break;
+            case R.id.tz_cest:
+                item.setChecked(true);
+                fDay.setTimeZone(TimeZones.CEST);
+                break;
+            case R.id.tz_ist:
+                item.setChecked(true);
+                fDay.setTimeZone(TimeZones.IST);
+                break;
+            case R.id.tz_kst:
+                item.setChecked(true);
+                fDay.setTimeZone(TimeZones.KST);
+                break;
+            case R.id.tz_aest:
+                item.setChecked(true);
+                fDay.setTimeZone(TimeZones.AEST);
+                break;
+
         }
 
+        fDay.setNewDate(getDateAsString(currentDate));
+
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            if (super.menu.isMenuShowing()) {
+                super.menu.toggle();
+                return true;
+            }
+
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

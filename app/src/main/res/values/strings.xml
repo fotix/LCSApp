@@ -7,4 +7,13 @@
 
     <string name="drawer_open">DrawerOpen</string>
     <string name="drawer_close">DrawerOpen</string>
+
+    <string name="timezone_gmt">GMT</string>
+    <string name="timezone_pdt">PDT</string>
+    <string name="timezone_edt">EDT</string>
+    <string name="timezone_cest">CEST</string>
+    <string name="timezone_ist">IST</string>
+    <string name="timezone_kst">KST</string>
+    <string name="timezone_aest">AEST</string>
+
 </resources>

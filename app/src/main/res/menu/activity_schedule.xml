@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ActivityDashboard" >
+    <group
+        android:checkableBehavior="single">
+        <item android:id="@+id/tz_pdt"
+            android:title="@string/timezone_pdt" />
+        <item android:id="@+id/tz_edt"
+            android:title="@string/timezone_edt" />
+        <item android:id="@+id/tz_gmt"
+            android:title="@string/timezone_gmt"
+            android:checked="true"/>
+        <item android:id="@+id/tz_cest"
+            android:title="@string/timezone_cest" />
+        <item android:id="@+id/tz_ist"
+            android:title="@string/timezone_ist" />
+        <item android:id="@+id/tz_kst"
+            android:title="@string/timezone_kst" />
+        <item android:id="@+id/tz_aest"
+            android:title="@string/timezone_aest" />
+    </group>
+</menu>

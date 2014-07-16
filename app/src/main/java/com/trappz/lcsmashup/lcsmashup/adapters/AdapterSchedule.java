@@ -93,23 +93,26 @@ public class AdapterSchedule extends BaseAdapter {
 
             holder.RedScore.setText(mList.get(position).getContestants().getRed().getWins()+"W - "+
                     mList.get(position).getContestants().getRed().getLosses()+"L");
-
-            if(mList.get(position).getWinnerId().equals(mList.get(position).getContestants().getBlue().getId()))
-            {
+        if(mList.get(position).getIsFinished().equals("1")) {
+            if (mList.get(position).getWinnerId().equals(mList.get(position).getContestants().getBlue().getId())) {
                 //Blue Team wins
 //                holder.BlueLogo.setBackgroundColor(Color.parseColor("#22FFBB33"));
 //                holder.RedLogo.setBackgroundColor(Color.parseColor("#00FFFFFF"));
 
                 holder.BlueLogo.setBackground(context.getResources().getDrawable(R.drawable.winner_border));
                 holder.RedLogo.setBackground(null);
-            }else
-            {
+            } else {
                 holder.RedLogo.setBackground(context.getResources().getDrawable(R.drawable.winner_border));
                 holder.BlueLogo.setBackground(null);
 
 //                holder.RedLogo.setBackgroundColor(Color.parseColor("#22FFBB33"));
 //                holder.BlueLogo.setBackgroundColor(Color.parseColor("#00FFFFFF"));
             }
+        }else
+        {
+            holder.BlueLogo.setBackground(null);
+            holder.RedLogo.setBackground(null);
+        }
             Picasso.with(context).load(C.BASE_URL+mList.get(position).getContestants().getBlue().getLogoURL()).into(holder.BlueLogo);
             Picasso.with(context).load(C.BASE_URL+mList.get(position).getContestants().getRed().getLogoURL()).into(holder.RedLogo);
         }else

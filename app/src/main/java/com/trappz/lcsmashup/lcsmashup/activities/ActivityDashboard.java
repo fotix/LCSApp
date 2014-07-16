@@ -1,6 +1,8 @@
 package com.trappz.lcsmashup.lcsmashup.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -9,12 +11,14 @@ import android.os.Looper;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.squareup.otto.Subscribe;
@@ -43,8 +47,8 @@ public class ActivityDashboard extends SuperActivity {
     ListView newsListview;
     public static ArrayList newsList = new ArrayList();
     AbsListView.OnScrollListener mScrollListener;
-    SlidingMenu menu;
 
+    RelativeLayout loadingLayout;
     public DrawerLayout mDrawerLayout;
     public ActionBarDrawerToggle mDrawerToggle;
 
@@ -61,7 +65,7 @@ public class ActivityDashboard extends SuperActivity {
 //        ApiServices.getMatch("2352");
 
 
-
+        loadingLayout = (RelativeLayout) findViewById(R.id.activity_dashboard_loadinglayout);
         newsList = new ArrayList();
         newsListview = (ListView) findViewById(R.id.newsList);
 
@@ -125,9 +129,42 @@ public class ActivityDashboard extends SuperActivity {
         newsList.addAll(rn.data);
         adapter.notifyDataSetChanged();
 
+        loadingLayout.setVisibility(View.GONE);
+
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
 
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            if (super.menu.isMenuShowing()) {
+                super.menu.toggle();
+                return true;
+            }else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Are you sure you want to exit?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                ActivityDashboard.this.finish();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+
+            }
+
+
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
 
 
     @Override
