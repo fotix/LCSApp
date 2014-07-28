@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <com.google.android.youtube.player.YouTubePlayerView
+        android:id="@+id/newsvideo_player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/newsvideo_player">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/activity_news_video_midlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#222222"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/activity_news_video_tv_headline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="7.5sp"
+                    android:paddingLeft="25dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="15dp"
+                    android:text="HeadLine"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/activity_news_video_tv_nutgraf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="15sp"
+                    android:paddingLeft="25dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="7.5dp"
+                    android:text="Nutgraf"
+                    android:textColor="#88FFFFFF" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/activity_news_video_body"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/activity_news_detail_midlayout"
+                android:background="#FFFFFFFF"
+                android:padding="5dp"
+                android:text="Body" />
+
+        </LinearLayout>
+
+
+    </ScrollView>
+</RelativeLayout>

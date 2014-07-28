@@ -1,23 +1,18 @@
 package com.trappz.lcsmashup.lcsmashup.activities;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -28,24 +23,21 @@ import com.squareup.picasso.Picasso;
 import com.trappz.lcsmashup.api.messages.EventBusManager;
 import com.trappz.lcsmashup.api.models.Game.Game;
 import com.trappz.lcsmashup.api.models.Game.Player;
-import com.trappz.lcsmashup.api.models.Game.Vod;
 import com.trappz.lcsmashup.api.models.Game.Vods;
 import com.trappz.lcsmashup.api.models.Match.Match;
 import com.trappz.lcsmashup.api.responses.GameResponseNotification;
-import com.trappz.lcsmashup.api.responses.ProgrammingBlockResponseNotification;
 import com.trappz.lcsmashup.api.services.ApiServices;
-import com.trappz.lcsmashup.api.services.ApiServicesInterface;
 import com.trappz.lcsmashup.lcsmashup.C;
 import com.trappz.lcsmashup.lcsmashup.R;
 import com.trappz.lcsmashup.lcsmashup.fragments.FragmentScheduleDay;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by Filipe Oliveira on 10-07-2014.
  */
 public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
+
+    public static String TAG = "ActivityGame";
+
     public TextView BlueScore;
     public TextView RedScore;
     public TextView BlueTeamName;
@@ -65,6 +57,7 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
     ScrollView scrollView;
 
     private RelativeLayout loading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,14 +66,14 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        loading = (RelativeLayout)findViewById(R.id.activity_game_loadinglayout);
+        loading = (RelativeLayout) findViewById(R.id.activity_game_loadinglayout);
 
         int value = getIntent().getExtras().getInt("index");
 
         Match m = FragmentScheduleDay.MatchList.get(value);
 
 
-        youTubeView  = (YouTubePlayerView)findViewById(R.id.youtube_view);
+        youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
 
         scrollView = (ScrollView) findViewById(R.id.activity_game_scrollview);
 
@@ -98,13 +91,13 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
         RedLogo = (ImageView) findViewById(R.id.activity_game_iv_redteam);
 
         blueteam = findViewById(R.id.activity_game_blueteam);
-         LinearLayout b =  (LinearLayout) blueteam.findViewById(R.id.activity_game_header);
+        LinearLayout b = (LinearLayout) blueteam.findViewById(R.id.activity_game_header);
         b.setBackgroundColor(Color.parseColor("#33B5E5"));
         redteam = findViewById(R.id.activity_game_redteam);
-        LinearLayout r =  (LinearLayout) redteam.findViewById(R.id.activity_game_header);
+        LinearLayout r = (LinearLayout) redteam.findViewById(R.id.activity_game_header);
         r.setBackgroundColor(Color.parseColor("#FF4444"));
 
-        if(m.getContestants() != null) {
+        if (m.getContestants() != null) {
             if (!m.getContestants().getBlue().getAcronym().isEmpty())
                 BlueTeamName.setText(m.getContestants().getBlue().getAcronym());
             else
@@ -116,11 +109,11 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
                 RedTeamName.setText(m.getContestants().getRed().getName());
 
 
-            BlueScore.setText(m.getContestants().getBlue().getWins()+"W - "+
-                    m.getContestants().getBlue().getLosses()+"L");
+            BlueScore.setText(m.getContestants().getBlue().getWins() + "W - " +
+                    m.getContestants().getBlue().getLosses() + "L");
 
-            RedScore.setText(m.getContestants().getRed().getWins()+"W - "+
-                    m.getContestants().getRed().getLosses()+"L");
+            RedScore.setText(m.getContestants().getRed().getWins() + "W - " +
+                    m.getContestants().getRed().getLosses() + "L");
 
             Picasso.with(getApplicationContext()).load(C.BASE_URL + m.getContestants().getBlue().getLogoURL()).into(BlueLogo);
             Picasso.with(getApplicationContext()).load(C.BASE_URL + m.getContestants().getRed().getLogoURL()).into(RedLogo);
@@ -145,8 +138,7 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if(id == android.R.id.home)
-        {
+        if (id == android.R.id.home) {
             onBackPressed();
             return true;
         }
@@ -160,6 +152,7 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
         Toast.makeText(this, "Oh no! " + error.toString(),
                 Toast.LENGTH_LONG).show();
     }
+
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player,
                                         boolean wasRestored) {
@@ -185,84 +178,130 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
     public void processGameResponseNotification(GameResponseNotification grn) {
         Game g = grn.data;
 
-        if(g.getNoVods() == 0) {
+        if (g.getNoVods() == 0) {
             Vods v = g.getVods();
-            if(v!=null){
-               vodUrl= v.getVod().getURL().split("v=")[1];
-               youTubeView.initialize("AIzaSyCAHG2RhyRuOIFJCo5purXDxwO57FPJSn0", this);
+            if (v != null) {
+                vodUrl = v.getVod().getURL().split("v=")[1];
+                youTubeView.initialize("AIzaSyCAHG2RhyRuOIFJCo5purXDxwO57FPJSn0", this);
 
-            }else
+            } else
                 youTubeView.setVisibility(View.GONE);
         }
 
         processGameData(g);
 
-        Log.i("gameActivity", "Got game: "+g.getPlayers().size());
+        Log.i("gameActivity", "Got game: " + g.getPlayers().size());
     }
 
 
     public void processGameData(Game g) {
 
         int counter = 0;
+        View v;
         for (String key : g.getPlayers().keySet()) {
             Player p = g.getPlayers().get(key);
+
+//            if(p.getItems().keySet().size() != 0){
+//                for(String s:p.getItems().keySet()){
+//                    Log.w(TAG,"ItemNUMBER: "+p.getItems().get(s));
+//                }
+//            }else
+//                Log.w(TAG,"no items found");
+
+//            if (!p.itemList.isEmpty()) {
+//                for (String s : p.itemList)
+//                    Log.w(TAG, s);
+//            } else
+//                Log.w(TAG, "no items found");
+
             TextView pname = new TextView(getApplicationContext());
             TextView pkda = new TextView(getApplicationContext());
             TextView pcs = new TextView(getApplicationContext());
+
 
             switch (counter) {
                 case 0:
                     pname = (TextView) blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player1).findViewById(R.id.player_name);
                     pkda = (TextView) blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player1).findViewById(R.id.player_kda);
                     pcs = (TextView) blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player1).findViewById(R.id.player_cs);
+
+                    v = blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player1);
+
+                    processItems(p, v);
+
+
                     break;
 
                 case 1:
                     pname = (TextView) blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player2).findViewById(R.id.player_name);
                     pkda = (TextView) blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player2).findViewById(R.id.player_kda);
                     pcs = (TextView) blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player2).findViewById(R.id.player_cs);
+
+                    v = blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player2);
+                    processItems(p, v);
                     break;
 
                 case 2:
                     pname = (TextView) blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player3).findViewById(R.id.player_name);
                     pkda = (TextView) blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player3).findViewById(R.id.player_kda);
                     pcs = (TextView) blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player3).findViewById(R.id.player_cs);
+                    v = blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player3);
+                    processItems(p, v);
                     break;
                 case 3:
                     pname = (TextView) blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player4).findViewById(R.id.player_name);
                     pkda = (TextView) blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player4).findViewById(R.id.player_kda);
                     pcs = (TextView) blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player4).findViewById(R.id.player_cs);
+                    v = blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player4);
+                    processItems(p, v);
                     break;
                 case 4:
                     pname = (TextView) blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player5).findViewById(R.id.player_name);
                     pkda = (TextView) blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player5).findViewById(R.id.player_kda);
                     pcs = (TextView) blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player5).findViewById(R.id.player_cs);
+                    v = blueteam.findViewById(R.id.activity_game_blueteam).findViewById(R.id.activity_game_player5);
+                    processItems(p, v);
                     break;
                 case 5:
                     pname = (TextView) redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player1).findViewById(R.id.player_name);
                     pkda = (TextView) redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player1).findViewById(R.id.player_kda);
                     pcs = (TextView) redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player1).findViewById(R.id.player_cs);
+
+                    v = redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player1);
+                    processItems(p, v);
                     break;
                 case 6:
                     pname = (TextView) redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player2).findViewById(R.id.player_name);
                     pkda = (TextView) redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player2).findViewById(R.id.player_kda);
                     pcs = (TextView) redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player2).findViewById(R.id.player_cs);
+
+                    v = redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player2);
+                    processItems(p, v);
                     break;
                 case 7:
                     pname = (TextView) redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player3).findViewById(R.id.player_name);
                     pkda = (TextView) redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player3).findViewById(R.id.player_kda);
                     pcs = (TextView) redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player3).findViewById(R.id.player_cs);
+
+                    v = redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player3);
+                    processItems(p, v);
                     break;
                 case 8:
                     pname = (TextView) redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player4).findViewById(R.id.player_name);
                     pkda = (TextView) redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player4).findViewById(R.id.player_kda);
                     pcs = (TextView) redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player4).findViewById(R.id.player_cs);
+
+                    v = redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player4);
+                    processItems(p, v);
                     break;
 
                 case 9:
                     pname = (TextView) redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player5).findViewById(R.id.player_name);
                     pkda = (TextView) redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player5).findViewById(R.id.player_kda);
                     pcs = (TextView) redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player5).findViewById(R.id.player_cs);
+
+                    v = redteam.findViewById(R.id.activity_game_redteam).findViewById(R.id.activity_game_player5);
+                    processItems(p, v);
                     break;
 
             }
@@ -272,20 +311,63 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
                 pname.setText("-");
 
 
-            if(pcs != null && p.getMinionsKilled() != null)
+            if (pcs != null && p.getMinionsKilled() != null)
                 pcs.setText(p.getMinionsKilled().toString());
             else
                 pcs.setText("-");
 
 
-            if(pkda != null && (p.getKills() != null && p.getDeaths() != null && p.getAssists() !=null))
-                pkda.setText(p.getKills()+"/"+p.getKills()+"/"+p.getAssists());
+            if (pkda != null && (p.getKills() != null && p.getDeaths() != null && p.getAssists() != null))
+                pkda.setText(p.getKills() + "/" + p.getKills() + "/" + p.getAssists());
             else
                 pkda.setText("-/-/-");
+
 
             counter++;
         }
 
         loading.setVisibility(View.GONE);
+    }
+
+    private void processItems(Player p, View v) {
+
+        ImageView champion = (ImageView) v.findViewById(R.id.champion);
+
+        if (p.getChampionId() != null)
+            Picasso.with(getApplicationContext()).load(C.ICON_CHAMPION_URL + p.getChampionId() + ".png").into(champion);
+
+        ImageView item1 = (ImageView) v.findViewById(R.id.player_item1);
+        ImageView item2 = (ImageView) v.findViewById(R.id.player_item2);
+        ImageView item3 = (ImageView) v.findViewById(R.id.player_item3);
+        ImageView item4 = (ImageView) v.findViewById(R.id.player_item4);
+        ImageView item5 = (ImageView) v.findViewById(R.id.player_item5);
+        ImageView item6 = (ImageView) v.findViewById(R.id.player_item6);
+
+        if (!p.itemList.isEmpty() && p.itemList.size() != 1) {
+            if (!p.itemList.get(0).equalsIgnoreCase("0"))
+                Picasso.with(getApplicationContext()).load(C.ICON_ITEMS_URL + p.itemList.get(0) + ".png").into(item1);
+
+            if (!p.itemList.get(1).equalsIgnoreCase("0"))
+                Picasso.with(getApplicationContext()).load(C.ICON_ITEMS_URL + p.itemList.get(1) + ".png").into(item2);
+
+            if (!p.itemList.get(2).equalsIgnoreCase("0"))
+                Picasso.with(getApplicationContext()).load(C.ICON_ITEMS_URL + p.itemList.get(2) + ".png").into(item3);
+
+            if (!p.itemList.get(3).equalsIgnoreCase("0"))
+                Picasso.with(getApplicationContext()).load(C.ICON_ITEMS_URL + p.itemList.get(3) + ".png").into(item4);
+
+            if (!p.itemList.get(4).equalsIgnoreCase("0"))
+                Picasso.with(getApplicationContext()).load(C.ICON_ITEMS_URL + p.itemList.get(4) + ".png").into(item5);
+
+            if (!p.itemList.get(5).equalsIgnoreCase("0"))
+                Picasso.with(getApplicationContext()).load(C.ICON_ITEMS_URL + p.itemList.get(5) + ".png").into(item6);
+
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
     }
 }

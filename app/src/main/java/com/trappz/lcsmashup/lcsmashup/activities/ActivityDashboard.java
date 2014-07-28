@@ -20,11 +20,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.squareup.otto.Subscribe;
 import com.trappz.lcsmashup.api.messages.EventBusManager;
 import com.trappz.lcsmashup.api.models.Match.Match;
 import com.trappz.lcsmashup.api.models.Match.PreviousGames;
+import com.trappz.lcsmashup.api.models.News.News;
 import com.trappz.lcsmashup.api.models.Programming.ProgrammingBlock;
 import com.trappz.lcsmashup.api.models.Programming.ProgrammingWeek;
 import com.trappz.lcsmashup.api.responses.MatchResponseNotification;
@@ -45,7 +48,7 @@ public class ActivityDashboard extends SuperActivity {
     boolean isLoading = false;
     AdapterNews adapter = null;
     ListView newsListview;
-    public static ArrayList newsList = new ArrayList();
+    public static ArrayList<News> newsList = new ArrayList<News>();
     AbsListView.OnScrollListener mScrollListener;
 
     RelativeLayout loadingLayout;
@@ -64,6 +67,9 @@ public class ActivityDashboard extends SuperActivity {
 //        ApiServices.getProgrammingBlock("1787");
 //        ApiServices.getMatch("2352");
 
+        AdView adView = (AdView) this.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 
         loadingLayout = (RelativeLayout) findViewById(R.id.activity_dashboard_loadinglayout);
         newsList = new ArrayList();
@@ -72,9 +78,12 @@ public class ActivityDashboard extends SuperActivity {
         newsListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-                Intent i = new Intent(getApplicationContext(), ActivityNewsDetail.class);
+                Intent i;
+                if (newsList.get(position).getYoutubeID() != null) {
+                    i = new Intent(getApplicationContext(), ActivityNewsVideo.class);
+                } else {
+                    i = new Intent(getApplicationContext(), ActivityNewsDetail.class);
+                }
                 i.putExtra("index", position);
                 startActivity(i);
             }
@@ -104,9 +113,6 @@ public class ActivityDashboard extends SuperActivity {
     }
 
 
-
-
-
     @Override
     public void onPause() {
 
@@ -126,7 +132,11 @@ public class ActivityDashboard extends SuperActivity {
 
         isLoading = false;
         offset = offset + 10;
-        newsList.addAll(rn.data);
+        for (int i = 0; i < rn.data.size(); i++) {
+            if (!rn.data.get(i).getTaxonomyId().equalsIgnoreCase("36"))
+                newsList.add(rn.data.get(i));
+        }
+//        newsList.addAll(rn.data);
         adapter.notifyDataSetChanged();
 
         loadingLayout.setVisibility(View.GONE);
@@ -141,7 +151,7 @@ public class ActivityDashboard extends SuperActivity {
             if (super.menu.isMenuShowing()) {
                 super.menu.toggle();
                 return true;
-            }else{
+            } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("Are you sure you want to exit?")
                         .setCancelable(false)
@@ -174,8 +184,7 @@ public class ActivityDashboard extends SuperActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if(id == android.R.id.home)
-        {
+        if (id == android.R.id.home) {
             this.toggleMenu();
             return true;
         }

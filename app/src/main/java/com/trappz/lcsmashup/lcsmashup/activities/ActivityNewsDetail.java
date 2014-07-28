@@ -81,8 +81,8 @@ public class ActivityNewsDetail extends Activity{
 
         topImage = (ImageView) findViewById(R.id.image_header);
 
-        if(!n.getImageUrl().equals(" "))
-            Picasso.with(getApplicationContext()).load(n.getImageUrl()).into(topImage);
+        if(!n.getImageMediumUrl().equals(" "))
+            Picasso.with(getApplicationContext()).load(n.getImageMediumUrl()).into(topImage);
 
 
         Log.d(TAG,n.getBody() );
@@ -124,7 +124,7 @@ public class ActivityNewsDetail extends Activity{
         return super.onOptionsItemSelected(item);
     }
 
-    class LoadImage extends AsyncTask<Object, Void, Bitmap> {
+   public class LoadImage extends AsyncTask<Object, Void, Bitmap> {
 
         private LevelListDrawable mDrawable;
 

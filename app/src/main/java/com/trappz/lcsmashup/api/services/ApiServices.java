@@ -21,7 +21,9 @@ public class ApiServices {
     private static String TAG = "ApiServices";
 
     private static String serverURL = "http://euw.lolesports.com:80/api/";
+
     private static ApiServicesInterface services;
+
 
     protected synchronized static ApiServicesInterface getInstance(){
 
@@ -33,6 +35,8 @@ public class ApiServices {
 
         return services;
     }
+
+
 
     public static String getNews(int limit,int offset){
         String requestID = UUID.randomUUID().toString();

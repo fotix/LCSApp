@@ -1,5 +1,10 @@
 package com.trappz.lcsmashup.api.models.Game;
 
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,17 +21,23 @@ public class Player {
     private Integer kills;
     private Integer deaths;
     private Integer assists;
-    private Integer endLevel;
+//    private Integer endLevel;
     private Integer minionsKilled;
-    private Integer totalGold;
-//    private String spell012;
-//    private String spell14;
-//    private String items03111;
-//    private String items13211;
-//    private String items21011;
-//    private String items32049;
-//    private String items43068;
-//    private String items53082;
+//    private Integer totalGold;
+
+//    private Map<String, String> items = new HashMap<String, String>();;
+//
+//    public Map<String, String> getItems() {
+//        return items;
+//    }
+//
+//    public void setItems(Map<String, String> data) {
+//        this.items=data;
+//    }
+
+    public ArrayList<String> itemList = new ArrayList<String>();
+
+
     private Integer championId;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -94,14 +105,14 @@ public class Player {
         this.assists = assists;
     }
 
-    public Integer getEndLevel() {
-        return endLevel;
-    }
-
-    public void setEndLevel(Integer endLevel) {
-        this.endLevel = endLevel;
-    }
-
+//    public Integer getEndLevel() {
+//        return endLevel;
+//    }
+//
+//    public void setEndLevel(Integer endLevel) {
+//        this.endLevel = endLevel;
+//    }
+//
     public Integer getMinionsKilled() {
         return minionsKilled;
     }
@@ -109,14 +120,14 @@ public class Player {
     public void setMinionsKilled(Integer minionsKilled) {
         this.minionsKilled = minionsKilled;
     }
-
-    public Integer getTotalGold() {
-        return totalGold;
-    }
-
-    public void setTotalGold(Integer totalGold) {
-        this.totalGold = totalGold;
-    }
+//
+//    public Integer getTotalGold() {
+//        return totalGold;
+//    }
+//
+//    public void setTotalGold(Integer totalGold) {
+//        this.totalGold = totalGold;
+//    }
 
 //    public String getSpell012() {
 //        return spell012;

@@ -24,6 +24,16 @@ public class News implements Parcelable {
     private String published;
     private String publishedDate;
     private String body;
+    private String youtubeId;
+
+    public String getYoutubeID(){
+        return youtubeId;
+    }
+
+    public void setYoutubeID(String id){
+        this.youtubeId = id;
+    }
+
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     public String getId() {

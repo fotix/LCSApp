@@ -6,6 +6,17 @@
     android:background="#CDCDCD"
     >
 
+    <ImageView
+        android:id="@+id/champion"
+        android:layout_width="0dp"
+        android:layout_weight="1.5"
+        android:padding="2dp"
+        android:layout_height="match_parent"
+        android:singleLine="true"
+        android:gravity="center|left"
+        android:adjustViewBounds="true"
+        />
+
     <TextView
         android:id="@+id/player_name"
         android:layout_width="0dp"
@@ -13,17 +24,17 @@
         android:layout_height="match_parent"
         android:singleLine="true"
         android:gravity="center|left"
-        android:text="Player Name"/>
+        android:text="-"/>
 
 
     <TextView
         android:id="@+id/player_kda"
         android:layout_width="0dp"
-        android:layout_weight="1.5"
+        android:layout_weight="1"
         android:layout_height="match_parent"
         android:singleLine="true"
         android:gravity="center|left"
-        android:text="11/11/11"/>
+        android:text="-/-/-"/>
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -31,44 +42,50 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/player_item1"
+            android:padding="2dp"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/default_background"/>
+            android:src="@color/trans"/>
         <ImageView
             android:layout_toRightOf="@+id/player_item1"
             android:id="@+id/player_item2"
+            android:padding="2dp"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/default_background"/>
+            android:src="@color/trans"/>
 
         <ImageView
             android:layout_toRightOf="@+id/player_item2"
             android:id="@+id/player_item3"
+            android:padding="2dp"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/default_background"/>
+            android:src="@color/trans"/>
 
         <ImageView
             android:layout_below="@+id/player_item1"
             android:id="@+id/player_item4"
+            android:padding="2dp"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/default_background"/>
+            android:src="@color/trans"/>
         <ImageView
             android:layout_below="@+id/player_item2"
             android:layout_toRightOf="@+id/player_item4"
             android:id="@+id/player_item5"
+            android:padding="2dp"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/default_background"/>
+            android:src="@color/trans"/>
 
         <ImageView
             android:layout_below="@+id/player_item3"
             android:layout_toRightOf="@+id/player_item5"
             android:id="@+id/player_item6"
+            android:padding="2dp"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/default_background"/>
+            android:src="@color/trans"/>
 
 
         </RelativeLayout>
@@ -81,6 +98,6 @@
         android:layout_height="match_parent"
         android:gravity="center|left"
         android:singleLine="true"
-        android:text="354"/>
+        android:text="-"/>
 
 </LinearLayout>
