@@ -72,7 +72,7 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
 
         Match m = FragmentScheduleDay.MatchList.get(value);
 
-
+        getActionBar().setTitle(m.getName());
         youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
 
         scrollView = (ScrollView) findViewById(R.id.activity_game_scrollview);

@@ -1,10 +1,14 @@
 package com.trappz.lcsmashup.lcsmashup.activities;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -42,7 +46,7 @@ import com.trappz.lcsmashup.lcsmashup.adapters.AdapterNews;
 import java.util.ArrayList;
 
 
-public class ActivityDashboard extends SuperActivity {
+public class ActivityDashboard extends BaseActivity {
     public static String TAG = "lcsactivity";
     private int offset = 0;
     boolean isLoading = false;
@@ -52,18 +56,24 @@ public class ActivityDashboard extends SuperActivity {
     AbsListView.OnScrollListener mScrollListener;
 
     RelativeLayout loadingLayout;
-    public DrawerLayout mDrawerLayout;
-    public ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+        setContentView(R.layout.activity_new_dashboard);
+
         EventBusManager.register(this);
 
-        getActionBar().setHomeButtonEnabled(true);
+//        getLPreviewUtils().trySetActionBar();
 
-        setupSlidingMenu();
+        ActionBar ab = getActionBar();
+
+        ab.setTitle(getString(R.string.app_name));
+
+
+//        getActionBar().setHomeButtonEnabled(true);
+
+//        setupSlidingMenu();
 //        ApiServices.getProgrammingBlock("1787");
 //        ApiServices.getMatch("2352");
 
@@ -112,6 +122,16 @@ public class ActivityDashboard extends SuperActivity {
         newsListview.setAdapter(adapter);
     }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+    }
+
+    @Override
+    protected int getSelfNavDrawerItem() {
+
+        return NAVDRAWER_ITEM_NEWS;
+    }
 
     @Override
     public void onPause() {
@@ -143,53 +163,60 @@ public class ActivityDashboard extends SuperActivity {
 
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//
+////            if (super.menu.isMenuShowing()) {
+////                super.menu.toggle();
+////                return true;
+////            } else {
+//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//                builder.setMessage("Are you sure you want to exit?")
+//                        .setCancelable(false)
+//                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                ActivityDashboard.this.finish();
+//                            }
+//                        })
+//                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dialog.cancel();
+//                            }
+//                        });
+//                AlertDialog alert = builder.create();
+//                alert.show();
+//
+//            }
+//
+//
+////        }
+//
+//        return super.onKeyDown(keyCode, event);
+//    }
 
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-            if (super.menu.isMenuShowing()) {
-                super.menu.toggle();
-                return true;
-            } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Are you sure you want to exit?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                ActivityDashboard.this.finish();
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                AlertDialog alert = builder.create();
-                alert.show();
-
-            }
-
-
-        }
-
-        return super.onKeyDown(keyCode, event);
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+//        int id = item.getItemId();
+//
+////        if (id == android.R.id.home) {
+//////            this.toggleMenu();
+////            return true;
+////        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
-        if (id == android.R.id.home) {
-            this.toggleMenu();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    private static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager
+                .getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 }

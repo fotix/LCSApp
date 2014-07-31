@@ -28,7 +28,10 @@ public abstract class SuperActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if(getActionBar() != null)
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+
         menu = new SlidingMenu(this);
     }
 

@@ -210,6 +210,7 @@ public class FragmentScheduleDay extends Fragment {
         ProgrammingWeek p = pwrn.data;
 
         if (p.getDays().get(0).getBlockNum() > 0) {
+            loadingLayout.setVisibility(View.VISIBLE);
             noMatches.setVisibility(View.INVISIBLE);
             for (int i = 0; i < p.getDays().get(0).getBlockIds().size(); i++) {
                 String aux = ApiServices.getProgrammingBlock(p.getDays().get(0).getBlockIds().get(i));
