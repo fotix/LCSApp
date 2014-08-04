@@ -34,6 +34,8 @@ import com.trappz.app.lcsmashup.C;
 import com.trappz.app.lcsmashup.R;
 import com.trappz.app.lcsmashup.fragments.FragmentScheduleDay;
 
+import java.util.logging.Logger;
+
 /**
  * Created by Filipe Oliveira on 10-07-2014.
  */
@@ -80,7 +82,8 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
 
         if (m != null) {
             totalGames = Integer.valueOf(m.getResult().size());
-            Log.w(TAG, "TOTAL GAMES: " + totalGames);
+            if(C.DEBUG)
+             C.Logger(TAG, "TOTAL GAMES: " + totalGames);
             if (gameNumber <= totalGames) {
                 nogame.setVisibility(View.GONE);
                 isValidGame = true;
