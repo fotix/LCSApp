@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#222222"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <ProgressBar
                     android:id="@+id/activity_dashboard_progressbar"
@@ -45,8 +45,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true" />
 
-
             </RelativeLayout>
+
+
 
             <com.google.android.gms.ads.AdView
                 android:id="@+id/adView"
@@ -59,6 +60,34 @@
 
                 />
         </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/activity_dashboard_nowifi"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#222222"
+            android:visibility="visible"
+            android:padding="15dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:layout_above="@+id/nowifi_tv"
+                android:src="@drawable/ic_wifi"/>
+            <TextView
+                android:id="@+id/nowifi_tv"
+                android:text="Please turn on an Internet Connection and restart the Application"
+                android:textSize="22sp"
+                android:textColor="#AAFFFFFF"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+
+        </RelativeLayout>
+
     </FrameLayout>
 
     <include layout="@layout/navdrawer_for_ab_overlay"></include>
