@@ -82,8 +82,9 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
 
         if (m != null) {
             totalGames = Integer.valueOf(m.getResult().size());
-            if(C.DEBUG)
-             C.Logger(TAG, "TOTAL GAMES: " + totalGames);
+
+            if(C.LOG_MODE) C.logI("TOTAL GAMES: " + totalGames);
+
             if (gameNumber <= totalGames) {
                 nogame.setVisibility(View.GONE);
                 isValidGame = true;
@@ -136,7 +137,7 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
             Picasso.with(getApplicationContext()).load(C.BASE_URL + m.getContestants().getBlue().getLogoURL()).into(BlueLogo);
             Picasso.with(getApplicationContext()).load(C.BASE_URL + m.getContestants().getRed().getLogoURL()).into(RedLogo);
 
-            Log.e("LCSGAME", m.getName());
+            if(C.LOG_MODE) C.logE( m.getName());
         }
         if (m.getIsFinished().compareToIgnoreCase("0") == 0) {
             matchDetailsLayout.setVisibility(View.INVISIBLE);
@@ -191,9 +192,9 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
             case R.id.game2:
                 if (item.isChecked()) item.setChecked(false);
                 else {
-                    Log.w(TAG, "GAME 2 CALLED");
+                    if(C.LOG_MODE) C.logW("GAME 2 CALLED");
                     if (totalGames >= 2) {
-                        Log.w(TAG, "GAME 2 CALLED VALID");
+                        if(C.LOG_MODE) C.logW("GAME 2 CALLED VALID");
                         Intent i = new Intent(getApplicationContext(), ActivityGame.class);
                         i.putExtra("gamenumber", 2);
                         i.putExtra("index", value);
@@ -317,7 +318,7 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
 
         processGameData(g);
 
-        Log.i("gameActivity", "Got game: " + g.getPlayers().size());
+        if(C.LOG_MODE) C.logI("Got game: " + g.getPlayers().size());
     }
 
 
@@ -327,19 +328,6 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
         View v;
         for (String key : g.getPlayers().keySet()) {
             Player p = g.getPlayers().get(key);
-
-//            if(p.getItems().keySet().size() != 0){
-//                for(String s:p.getItems().keySet()){
-//                    Log.w(TAG,"ItemNUMBER: "+p.getItems().get(s));
-//                }
-//            }else
-//                Log.w(TAG,"no items found");
-
-//            if (!p.itemList.isEmpty()) {
-//                for (String s : p.itemList)
-//                    Log.w(TAG, s);
-//            } else
-//                Log.w(TAG, "no items found");
 
             TextView pname = new TextView(getApplicationContext());
             TextView pkda = new TextView(getApplicationContext());

@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.trappz.app.lcsmashup.C;
 import com.trappz.app.lcsmashup.R;
 import com.trappz.app.lcsmashup.Utils.LPreviewUtilsBase;
 
@@ -109,7 +110,7 @@ public class BaseActivity extends Activity{
             mainContent.setAlpha(0);
             mainContent.animate().alpha(1).setDuration(MAIN_CONTENT_FADEIN_DURATION);
         } else {
-            Log.w(TAG, "No view with ID main_content to fade in.");
+            if(C.LOG_MODE) C.logW( "No view with ID main_content to fade in.");
         }
 
     }
@@ -122,13 +123,13 @@ public class BaseActivity extends Activity{
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (mDrawerLayout == null) {
-            Log.w(TAG,"Drawer Layout is NULL");
+            if(C.LOG_MODE) C.logW("Drawer Layout is NULL");
             return;
         }
-        Log.w(TAG,"Drawer Layout is OK");
+        if(C.LOG_MODE) C.logW("Drawer Layout is OK");
 
         if (selfItem == NAVDRAWER_ITEM_INVALID) {
-            Log.w(TAG,"SELF ITEM: "+selfItem);
+            if(C.LOG_MODE) C.logW("SELF ITEM: "+selfItem);
             // do not show a nav drawer
             View navDrawer = mDrawerLayout.findViewById(R.id.navdrawer);
             if (navDrawer != null) {
@@ -226,7 +227,7 @@ public class BaseActivity extends Activity{
     /** Populates the navigation drawer with the appropriate items. */
     private void populateNavDrawer() {
         mNavDrawerItems.clear();
-        Log.w(TAG,"Populating Nav Drawer");
+        if(C.LOG_MODE) C.logW("Populating Nav Drawer");
         mNavDrawerItems.add(NAVDRAWER_ITEM_NEWS);
         mNavDrawerItems.add(NAVDRAWER_ITEM_SCHEDULE);
         mNavDrawerItems.add(NAVDRAWER_ITEM_ABOUT);
@@ -235,13 +236,13 @@ public class BaseActivity extends Activity{
     }
 
     private void createNavDrawerItems() {
-        Log.w(TAG,"Creating Nav Drawer Items");
+        if(C.LOG_MODE) C.logW("Creating Nav Drawer Items");
         mDrawerItemsListContainer = (ViewGroup) findViewById(R.id.navdrawer_items_list);
         if (mDrawerItemsListContainer == null) {
-            Log.w(TAG,"Item list Container is null");
+            if(C.LOG_MODE) C.logW("Item list Container is null");
             return;
         }
-        Log.w(TAG,"Item list Container is OK - size:"+ mNavDrawerItems.size());
+        if(C.LOG_MODE) C.logW("Item list Container is OK - size:"+ mNavDrawerItems.size());
         mNavDrawerItemViews = new View[mNavDrawerItems.size()];
         mDrawerItemsListContainer.removeAllViews();
 
@@ -250,7 +251,7 @@ public class BaseActivity extends Activity{
 
             mNavDrawerItemViews[i] = makeNavDrawerItem(itemId, mDrawerItemsListContainer);
             mDrawerItemsListContainer.addView(mNavDrawerItemViews[i]);
-            Log.w(TAG,"Adding: "+mNavDrawerItemViews[i]);
+            if(C.LOG_MODE) C.logW("Adding: "+mNavDrawerItemViews[i]);
             ++i;
         }
     }

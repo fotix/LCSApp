@@ -18,6 +18,7 @@ import com.squareup.picasso.Picasso;
 import com.trappz.app.api.models.News.News;
 import com.trappz.app.api.models.Youtube.YoutubeResponse;
 
+import com.trappz.app.lcsmashup.C;
 import com.trappz.app.lcsmashup.R;
 
 import org.apache.http.HttpEntity;
@@ -148,7 +149,7 @@ public class AdapterNews extends BaseAdapter {
                         final int statusCode = getResponse.getStatusLine().getStatusCode();
 
                         if (statusCode != HttpStatus.SC_OK) {
-                            Log.w("youtube",
+                            if(C.LOG_MODE) C.logW(
                                     "Error " + statusCode + " for URL " + url);
                             return;
                         }
@@ -162,8 +163,8 @@ public class AdapterNews extends BaseAdapter {
 
                         if(response != null){
 
-                            Log.w(TAG,"KIND: "+response.getKind());
-                            Log.w(TAG, "VIDEO ID:" + response.getItems().get(0).getId().getVideoId());
+                            if(C.LOG_MODE) C.logW("KIND: "+response.getKind());
+                            if(C.LOG_MODE) C.logW("VIDEO ID:" + response.getItems().get(0).getId().getVideoId());
                             newsList.get(position).setImageUrl("http://img.youtube.com/vi/" + response.getItems().get(0).getId().getVideoId() + "/0.jpg");
                             newsList.get(position).setImageMediumUrl("http://img.youtube.com/vi/" + response.getItems().get(0).getId().getVideoId() + "/0.jpg");
                             newsList.get(position).setYoutubeID(response.getItems().get(0).getId().getVideoId());
@@ -172,7 +173,8 @@ public class AdapterNews extends BaseAdapter {
                     }
                     catch (IOException e) {
                         getRequest.abort();
-                        Log.w("youtube", "Error for URL " + url, e);
+                        if(C.LOG_MODE)
+                            Log.w("youtube", "Error for URL " + url, e);
                         return;
                     }
 

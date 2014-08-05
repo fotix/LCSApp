@@ -7,6 +7,7 @@ import com.trappz.app.api.messages.EventBusManager;
 import com.trappz.app.api.messages.ResponseNotification;
 import com.trappz.app.api.models.Game.Game;
 import com.trappz.app.api.responses.GameResponseNotification;
+import com.trappz.app.lcsmashup.C;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +35,9 @@ public class GameCallback extends GenericCallback<Response> {
 
         try {
             String theString = getStringFromInputStream(r.getBody().in());
-            Log.w(TAG, theString);
+
+            if(C.LOG_MODE) C.logW(theString);
+
             Gson gson = new Gson();
 
             Game m = gson.fromJson(theString, Game.class);
@@ -59,11 +62,11 @@ public class GameCallback extends GenericCallback<Response> {
                                 String item = player.getString(playerKeys);
                                 m.getPlayers().get(s).itemList.add(item);
                             }
-//                            Log.w(TAG, "3 - VALUE:" + playerKeys.toString());
+
                         }
                     }
                 }
-//                Log.w(TAG, "VALUE: " + currentDynamicKey.toString());
+
             }
 
             notification.data = m;

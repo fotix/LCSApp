@@ -82,7 +82,7 @@ public class ActivityNewsDetail extends Activity{
             Picasso.with(getApplicationContext()).load(n.getImageMediumUrl()).into(topImage);
 
 
-        Log.d(TAG,n.getBody() );
+        if(C.LOG_MODE) C.logD(n.getBody() );
 
         String b = n.getBody().replaceAll(System.getProperty("line.separator"),"<br>").split("<h3>Related")[0];
 
@@ -129,7 +129,7 @@ public class ActivityNewsDetail extends Activity{
         protected Bitmap doInBackground(Object... params) {
             String source = (String) params[0];
             mDrawable = (LevelListDrawable) params[1];
-            Log.d(TAG, "doInBackground " + C.BASE_URL+source);
+            if(C.LOG_MODE) C.logD("doInBackground " + C.BASE_URL+source);
             try {
                 InputStream is;
                 if(source.startsWith("http")) {
@@ -154,8 +154,8 @@ public class ActivityNewsDetail extends Activity{
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-            Log.d(TAG, "onPostExecute drawable " + mDrawable);
-            Log.d(TAG, "onPostExecute bitmap " + bitmap);
+            if(C.LOG_MODE) C.logD("onPostExecute drawable " + mDrawable);
+            if(C.LOG_MODE) C.logD("onPostExecute bitmap " + bitmap);
             if (bitmap != null) {
                 BitmapDrawable d = new BitmapDrawable(bitmap);
 

@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.trappz.app.lcsmashup.C;
 import com.trappz.app.lcsmashup.R;
 import com.trappz.app.lcsmashup.fragments.FragmentScheduleBar;
 import com.trappz.app.lcsmashup.fragments.FragmentScheduleDay;
@@ -47,13 +48,13 @@ public class ActivitySchedule extends BaseActivity implements FragmentScheduleBa
 
         if(cal == null){
             cal = Calendar.getInstance();
-            Log.i(TAG,"Creating new Calendar instance");
+            if(C.LOG_MODE) C.logI("Creating new Calendar instance");
         }
 
         if(currentDate == null) {
             currentDate = new Date();
         }
-        Log.e(TAG, "CURRENT DATE: " + getDateAsString(currentDate));
+        if(C.LOG_MODE) C.logE("CURRENT DATE: " + getDateAsString(currentDate));
 
         fDay.setNewDate(getDateAsString(currentDate));
         fBar.refreshDate(getDateAsString(currentDate),getDayOfWeek(currentDate));
@@ -78,8 +79,8 @@ public class ActivitySchedule extends BaseActivity implements FragmentScheduleBa
         currentDate = cal.getTime();
 
         String newDate = getDateAsString(currentDate);
-        Log.i(TAG,"NEW DATE: "+newDate);
-        Log.i(TAG,"NEW DATE ISO: "+getDateAsStringISO(currentDate));
+        if(C.LOG_MODE) C.logI("NEW DATE: "+newDate);
+        if(C.LOG_MODE) C.logI("NEW DATE ISO: "+getDateAsStringISO(currentDate));
 
         fBar.refreshDate(newDate,getDayOfWeek(currentDate));
         fDay.setNewDate(newDate);
@@ -93,8 +94,8 @@ public class ActivitySchedule extends BaseActivity implements FragmentScheduleBa
 
         String newDate = getDateAsString(currentDate);
 
-        Log.i(TAG,"NEW DATE: "+newDate);
-        Log.i(TAG,"NEW DATE ISO: "+getDateAsStringISO(currentDate));
+        if(C.LOG_MODE) C.logI("NEW DATE: "+newDate);
+        if(C.LOG_MODE) C.logI("NEW DATE ISO: "+getDateAsStringISO(currentDate));
 
         fBar.refreshDate(newDate,getDayOfWeek(currentDate));
         fDay.setNewDate(newDate);

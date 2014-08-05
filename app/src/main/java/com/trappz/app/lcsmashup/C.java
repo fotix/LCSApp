@@ -7,7 +7,13 @@ import android.util.Log;
  */
 public class C {
 
-    public static final boolean DEBUG = true;
+    /**
+     * Logging Constants
+     */
+    public static boolean LOG_MODE = true;
+    public static final boolean LOG_MODE_EXCEPTIONS = true;
+    public static final String TAG = "LCSMashup";
+
 
     public static final int NEWS_PER_REQUEST = 10;
 
@@ -16,8 +22,162 @@ public class C {
     public static final String BASE_URL = "http://euw.lolesports.com";
 
 
-    public static void Logger(String TAG, String Text) {
-        if (DEBUG)
-            Log.d(TAG, Text);
+    /**
+     * Log e.
+     *
+     * @param module
+     *           the module
+     * @param msg
+     *           the msg
+     */
+    public static void logE(String module, String msg) {
+        if (LOG_MODE) {
+            if (msg!=null)
+            {
+                Log.e(TAG,getLogClass()+msg);
+            }
+
+        }
+    }
+
+    public static void logE(String msg) {
+        if (LOG_MODE) {
+            if (msg!=null)
+            {
+                Log.e(TAG,getLogClass()+msg);
+            }
+
+        }
+    }
+
+
+    public static void logE(Throwable th) {
+        if (LOG_MODE) {
+            if (th!=null)
+            {
+                Log.e(TAG,getLogClass()+th.getCause()+" "+th.getMessage());
+                Log.w(TAG,th);
+            }
+
+        }
+    }
+
+    /**
+     * Log w.
+     *
+     * @param module
+     *           the module
+     * @param msg
+     *           the msg
+     */
+
+    public static void logW(String module, String msg) {
+        if (LOG_MODE) {
+            Log.d(TAG,getLogClass()+msg);
+        }
+    }
+
+    public static void logW(String msg) {
+        if (LOG_MODE) {
+            Log.d(TAG,getLogClass()+msg);
+        }
+    }
+
+
+
+    /**
+     * Log d.
+     *
+     * @param module
+     *           the module
+     * @param msg
+     *           the msg
+     */
+    public static void logD(String module, String msg) {
+        if (LOG_MODE) {
+            if (msg!=null)
+            {
+                Log.d(TAG,getLogClass()+msg);
+            }
+        }
+    }
+
+    public static void logD(String msg) {
+        if (LOG_MODE)
+        {
+            if (msg!=null)
+            {
+                Log.d(TAG,getLogClass()+msg);
+            }
+        }
+    }
+
+
+    /**
+     * Log i.
+     *
+     * @param module
+     *           the module
+     * @param msg
+     *           the msg
+     */
+    public static void logI(String module, String msg) {
+        if (LOG_MODE) {
+            if (msg!=null)
+            {
+                Log.i(TAG,getLogClass()+msg);
+            }
+        }
+    }
+
+    public static void logI(String msg) {
+        if (LOG_MODE)
+        {
+            if (msg!=null)
+            {
+                Log.i(TAG,getLogClass()+msg);
+            }
+        }
+    }
+
+
+
+    /**
+     * Log exception.
+     *
+     * @param module
+     *           the module
+     * @param e
+     *           the e
+     */
+    public static void logException(String module, Exception e) {
+        if (LOG_MODE && LOG_MODE_EXCEPTIONS) {
+            Log.e(TAG,getLogClass()+e.getCause()+" "+e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+    static String getLogClass()
+    {
+        try
+        {
+            StackTraceElement[] str = Thread.currentThread().getStackTrace();
+
+            StackTraceElement callingstr = str[4];
+
+            String cls = callingstr.getClassName();
+            String method=str[5].getMethodName();
+            int num = callingstr.getLineNumber();
+
+            return cls + ":"+ method+":"+ num + " ";
+        }
+        catch (Exception e)
+        {
+
+        }
+
+        return "";
+
     }
 }

@@ -109,7 +109,7 @@ public class ActivityNewsVideo extends YouTubeBaseActivity implements YouTubePla
         protected Bitmap doInBackground(Object... params) {
             String source = (String) params[0];
             mDrawable = (LevelListDrawable) params[1];
-            Log.d(TAG, "doInBackground " + C.BASE_URL + source);
+            if(C.LOG_MODE) C.logD("doInBackground " + C.BASE_URL + source);
             try {
                 InputStream is;
                 if (source.startsWith("http")) {
@@ -133,8 +133,8 @@ public class ActivityNewsVideo extends YouTubeBaseActivity implements YouTubePla
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-            Log.d(TAG, "onPostExecute drawable " + mDrawable);
-            Log.d(TAG, "onPostExecute bitmap " + bitmap);
+            if(C.LOG_MODE) C.logD("onPostExecute drawable " + mDrawable);
+            if(C.LOG_MODE) C.logD("onPostExecute bitmap " + bitmap);
             if (bitmap != null) {
                 BitmapDrawable d = new BitmapDrawable(bitmap);
 

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.trappz.app.api.messages.EventBusManager;
 import com.trappz.app.api.messages.ResponseNotification;
+import com.trappz.app.lcsmashup.C;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class GenericCallback<T> implements Callback<T> {
 
         EventBusManager.post(notification);
 
-        Log.e(TAG,"ERRO: "+error.getMessage());
+        if(C.LOG_MODE) C.logE("ERRO: "+error.getMessage());
     }
 
     @Override

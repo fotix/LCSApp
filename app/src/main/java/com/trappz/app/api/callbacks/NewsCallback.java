@@ -8,6 +8,7 @@ import com.trappz.app.api.messages.EventBusManager;
 import com.trappz.app.api.messages.ResponseNotification;
 import com.trappz.app.api.models.News.News;
 import com.trappz.app.api.responses.NewsResponseNotification;
+import com.trappz.app.lcsmashup.C;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -52,7 +53,7 @@ public class NewsCallback extends GenericCallback<Response> {
 
                 notification.data = data;
             } else
-                Log.d(TAG, "bode");
+            if(C.LOG_MODE) C.logD("bode");
 
         } catch (IOException e) {
             // TODO Auto-generated catch block

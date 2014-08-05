@@ -23,6 +23,7 @@ import com.trappz.app.api.responses.MatchResponseNotification;
 import com.trappz.app.api.responses.ProgrammingBlockResponseNotification;
 import com.trappz.app.api.responses.ProgrammingWeekResponseNotification;
 import com.trappz.app.api.services.ApiServices;
+import com.trappz.app.lcsmashup.C;
 import com.trappz.app.lcsmashup.R;
 import com.trappz.app.lcsmashup.Utils.TimeZones;
 import com.trappz.app.lcsmashup.activities.ActivityGame;
@@ -142,7 +143,7 @@ public class FragmentScheduleDay extends Fragment {
 //        loadingState.setLoading(true);
         ApiServices.getProgrammingWeek(date, currentTimeZone);
 
-        Log.i(TAG, "Programming week: " + date + " - " + currentTimeZone);
+        if(C.LOG_MODE) C.logI("Programming week: " + date + " - " + currentTimeZone);
 
     }
 
@@ -227,7 +228,7 @@ public class FragmentScheduleDay extends Fragment {
         ProgrammingBlock p = pbrn.data;
 
         if (p != null) {
-            Log.e(TAG, p.getLabel());
+            if(C.LOG_MODE) C.logE(p.getLabel());
             BlockList.put(p.getTournamentId(), p);
 
             for (int i = 0; i < p.getMatches().size(); i++) {
@@ -270,12 +271,12 @@ public class FragmentScheduleDay extends Fragment {
 
 
         if (!sameDay(matchDate, ActivitySchedule.currentDate)) {
-            Log.i(TAG, m.getName() + " - " + m.getDateTime() + "   NOT the current date");
+            if(C.LOG_MODE) C.logI(m.getName() + " - " + m.getDateTime() + "   NOT the current date");
             MatchIdList.put(mrn.requestId, true);
             checkLoadingState();
             return;
         } else {
-            Log.i(TAG, m.getName() + " - " + m.getDateTime() + "   IS the current date");
+            if(C.LOG_MODE) C.logI(m.getName() + " - " + m.getDateTime() + "   IS the current date");
         }
 
 /*        if(!ActivitySchedule.getDayOfWeek(matchDate).equals(ActivitySchedule.getDayOfWeek(ActivitySchedule.currentDate)))
@@ -284,7 +285,7 @@ public class FragmentScheduleDay extends Fragment {
         }*/
 
         if (m != null) {
-            Log.w(TAG, m.getName() + "    " + m.getMatchId() + "   " + m.getResult().get("game0").getId());
+            if(C.LOG_MODE) C.logW( m.getName() + "    " + m.getMatchId() + "   " + m.getResult().get("game0").getId());
 
             m.setColor(BlockList.get(m.getTournament().getId()).getLeagueColor());
 
@@ -302,7 +303,7 @@ public class FragmentScheduleDay extends Fragment {
                         thisMatchDate = format.parse(thisMatch.getDateTime());
                         anotherDate = format.parse(another.getDateTime());
 
-//                        Log.i(TAG, "COMPARING: " + thisMatchDate.toString() + "     -    " + anotherDate.toString());
+
 
                         if (thisMatchDate.after(anotherDate))
                             return 1;
@@ -326,7 +327,7 @@ public class FragmentScheduleDay extends Fragment {
 
         } else {
             MatchIdList.put(mrn.requestId, true);
-            Log.w(TAG, "Match is null ....");
+            if(C.LOG_MODE) C.logW( "Match is null ....");
         }
 
 
