@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.trappz.app.lcsmashup"
-    android:versionCode="100"
-    android:versionName="1.0.0">
+    package="com.twistedsin.app.lcsmashup"
+    android:versionCode="2"
+    android:versionName="1.0.1">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
@@ -28,7 +28,7 @@
 
 
         <activity
-            android:name="com.trappz.app.lcsmashup.activities.ActivityDashboard"
+            android:name="com.twistedsin.app.lcsmashup.activities.ActivityDashboard"
             android:label="@string/app_name"
         >
 
@@ -41,34 +41,34 @@
 
 
         <activity
-            android:name="com.trappz.app.lcsmashup.activities.ActivityNewsDetail"
+            android:name="com.twistedsin.app.lcsmashup.activities.ActivityNewsDetail"
             android:theme="@style/AppTheme.TranslucentActionBar"
 
          />
 
         <activity
-            android:name="com.trappz.app.lcsmashup.activities.ActivitySchedule"
+            android:name="com.twistedsin.app.lcsmashup.activities.ActivitySchedule"
             android:theme="@style/AppTheme"
 >
 
         </activity>
 
         <activity
-            android:name="com.trappz.app.lcsmashup.activities.ActivityGame"
+            android:name="com.twistedsin.app.lcsmashup.activities.ActivityGame"
             android:theme="@style/AppTheme"
             android:configChanges="orientation|screenSize"
         >
         </activity>
 
         <activity
-            android:name="com.trappz.app.lcsmashup.activities.ActivityNewsVideo"
+            android:name="com.twistedsin.app.lcsmashup.activities.ActivityNewsVideo"
             android:theme="@style/AppTheme"
             android:configChanges="orientation|screenSize"
             >
         </activity>
 
         <activity
-            android:name="com.trappz.app.lcsmashup.activities.ActivityAbout"
+            android:name="com.twistedsin.app.lcsmashup.activities.ActivityAbout"
             android:theme="@style/AppTheme"
             android:configChanges="orientation|screenSize"
             >

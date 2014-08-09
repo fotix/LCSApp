@@ -35,7 +35,7 @@
                     android:layout_weight="1"
                     android:padding="10dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/default_background" />
+                    android:src="@drawable/tbd" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -50,7 +50,7 @@
                         android:layout_weight="1"
                         android:textColor="#FFFFFF"
                         android:gravity="left|center"
-                        android:text="Blue Team" />
+                        android:text="TBD" />
 
                     <TextView
                         android:id="@+id/activity_game_score_blueteam"
@@ -85,7 +85,7 @@
                         android:layout_weight="1"
                         android:textColor="#FFFFFF"
                         android:gravity="right|center"
-                        android:text="Red Team" />
+                        android:text="TBD" />
 
                     <TextView
                         android:id="@+id/activity_game_score_redteam"
@@ -106,7 +106,7 @@
                     android:layout_weight="1"
                     android:padding="10dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/default_background" />
+                    android:src="@drawable/tbd" />
 
             </LinearLayout>
 

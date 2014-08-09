@@ -40,7 +40,7 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:text="Version 1.0.0"
+                android:text="@string/app_version"
                 android:textColor="@color/body_text_1"
                 android:textSize="18sp" />
 
@@ -52,7 +52,20 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:text="©2014 LCSMashup"
+                android:text="©2014 TwistedSin"
+                android:textColor="@color/body_text_1"
+                android:textSize="18sp" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_about"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="Developed by Filipe Oliveira"
                 android:textColor="@color/body_text_1"
                 android:textSize="18sp" />
 
@@ -70,9 +83,15 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Remember to rate the application "/>
+
+                    android:clickable="true"
+                    android:id="@+id/rate_this_app"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:textColor="@color/body_text_1"
+                    android:background="@drawable/sl_sliding_menu_option"
+                    android:text="Remember to rate the application here!"/>
                 </LinearLayout>
         </LinearLayout>
 

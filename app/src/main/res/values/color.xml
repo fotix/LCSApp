@@ -4,6 +4,7 @@
     <item name="actionbar" type="color">#3b000000</item>
     <item name="actionbar_tabs" type="color">#3b000000</item>
     <item name="white" type="color">#FFFFFF</item>
+    <item name="black" type="color">#FF000000</item>
     <item name="trans" type="color">#00000000</item>
 
 

@@ -5,11 +5,11 @@ android {
     buildToolsVersion '20.0.0'
 
     defaultConfig {
-        applicationId "com.trappz.app.lcsmashup"
+        applicationId "com.twistedsin.app.lcsmashup"
         minSdkVersion 14
         targetSdkVersion 20
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.1"
     }
     buildTypes {
         release {
@@ -22,7 +22,6 @@ android {
 repositories {
     maven { url 'http://jzaccone.github.io/SlidingMenu-aar' }
     mavenCentral()
-
 }
 
 dependencies {
@@ -36,5 +35,4 @@ dependencies {
     compile files('libs/date4j.jar')
     compile files('libs/YouTubeAndroidPlayerApi.jar')
     compile 'com.google.android.gms:play-services:4.4.52'
-
 }
