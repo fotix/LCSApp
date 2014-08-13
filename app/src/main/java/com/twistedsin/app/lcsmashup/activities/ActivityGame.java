@@ -8,11 +8,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,8 +62,9 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
     int value, gameNumber, totalGames;
     private RelativeLayout loading;
     private RelativeLayout nogame;
+    private RelativeLayout spoilerLayout;
     boolean isValidGame = false;
-
+    Switch spoilerSwitch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +74,17 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
 
         loading = (RelativeLayout) findViewById(R.id.activity_game_loadinglayout);
         nogame = (RelativeLayout) findViewById(R.id.activity_game_nogame);
+        spoilerLayout = (RelativeLayout) findViewById(R.id.activity_game_spoiler_layout);
+
+        if(C.spoilers)
+            spoilerLayout.setVisibility(View.GONE);
+
+        spoilerLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spoilerLayout.setVisibility(View.GONE);
+            }
+        });
 
         value = getIntent().getExtras().getInt("index");
         gameNumber = getIntent().getExtras().getInt("gamenumber");
@@ -142,6 +156,7 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
             if (C.LOG_MODE) C.logE(m.getName());
         }
         if (m.getIsFinished().compareToIgnoreCase("0") == 0) {
+            spoilerLayout.setVisibility(View.GONE);
             matchDetailsLayout.setVisibility(View.INVISIBLE);
             loading.setVisibility(View.GONE);
             youTubeView.setVisibility(View.GONE);

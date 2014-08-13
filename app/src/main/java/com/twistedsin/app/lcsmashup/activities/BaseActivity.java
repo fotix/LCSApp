@@ -18,7 +18,9 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.twistedsin.app.lcsmashup.C;
@@ -49,6 +51,9 @@ public class BaseActivity extends Activity{
     protected static final int NAVDRAWER_ITEM_NEWS = 0;
     protected static final int NAVDRAWER_ITEM_SCHEDULE = 1;
     protected static final int NAVDRAWER_ITEM_ABOUT = 2;
+    protected static final int NAVDRAWER_ITEM_SPOILER = 3;
+    protected static final int NAVDRAWER_ITEM_LIVE_FEED = 4;
+
     protected static final int NAVDRAWER_ITEM_SETTINGS = 6;
     protected static final int NAVDRAWER_ITEM_INVALID = -1;
     protected static final int NAVDRAWER_ITEM_SEPARATOR = -2;
@@ -74,6 +79,7 @@ public class BaseActivity extends Activity{
     private ArrayList<Integer> mNavDrawerItems = new ArrayList<Integer>();
     private Handler mHandler;
     private View[] mNavDrawerItemViews = null;
+    private Switch spoilerSwitch;
 
     // variables that control the Action Bar auto hide behavior (aka "quick recall")
     private boolean mActionBarAutoHideEnabled = false;
@@ -98,11 +104,46 @@ public class BaseActivity extends Activity{
 
     }
 
+    private void restartActivity() {
+        Intent intent = getIntent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+        startActivity(intent);
+        overridePendingTransition(0, 0);
+    }
+
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
 
         super.onPostCreate(savedInstanceState);
         setupNavDrawer();
+        spoilerSwitch = (Switch)findViewById(R.id.spoiler_switch);
+        if(C.spoilers)
+            spoilerSwitch.setChecked(true);
+        else
+            spoilerSwitch.setChecked(false);
+
+        spoilerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    C.spoilers = true;
+                } else {
+                    C.spoilers = false;
+                }
+                mDrawerLayout.closeDrawer(Gravity.START);
+
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        restartActivity();
+                    }
+                }, NAVDRAWER_LAUNCH_DELAY);
+
+
+
+            }
+        });
 
         View mainContent = findViewById(R.id.main_content);
         if (mainContent != null) {

@@ -13,6 +13,40 @@
         android:orientation="vertical">
 
         <include layout="@layout/navdrawer_content" />
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/theme_primary"/>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Spoilers"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:layout_marginRight="32dp"
+                android:textColor="@color/body_text_1"
+                android:gravity="start|center_vertical"
+                android:layout_gravity="start|center_vertical"
+                android:textSize="14sp"/>
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:track="@drawable/apptheme_switch_track_holo_light"
+                android:thumb="@drawable/apptheme_switch_inner_holo_light"
+                android:id="@+id/spoiler_switch" />
+
+            </LinearLayout>
+
 
     </LinearLayout>
 

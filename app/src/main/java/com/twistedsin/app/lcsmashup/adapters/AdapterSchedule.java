@@ -107,7 +107,7 @@ public class AdapterSchedule extends BaseAdapter {
             }
 
 
-            if (mList.get(position).getIsFinished().equals("1")) {
+            if (C.spoilers && mList.get(position).getIsFinished().equals("1") ) {
                 if (mList.get(position).getWinnerId().equals(mList.get(position).getContestants().getBlue().getId())) {
                     //Blue Team wins
 //                holder.BlueLogo.setBackgroundColor(Color.parseColor("#22FFBB33"));
@@ -127,6 +127,8 @@ public class AdapterSchedule extends BaseAdapter {
                 holder.RedLogo.setBackgroundResource(R.drawable.looser_border);
 
             }
+
+
 
         } else {
             holder.BlueTeamName.setText("TBD");
