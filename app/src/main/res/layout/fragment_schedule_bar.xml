@@ -19,8 +19,9 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="50dp"
-        android:orientation="vertical">
+        android:layout_height="@dimen/action_bar_height"
+        android:orientation="vertical"
+        >
 
         <TextView
             android:id="@+id/fragment_bar_date"
@@ -30,6 +31,7 @@
             android:gravity="center"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
+
             android:text="CURRENT DATE"/>
 
         <TextView
@@ -38,8 +40,9 @@
             android:layout_weight="1"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:layout_height="0dp"
+
             android:gravity="center"
             android:text="Monday"/>
         </LinearLayout>

@@ -8,8 +8,8 @@ android {
         applicationId "com.twistedsin.app.lcsmashup"
         minSdkVersion 14
         targetSdkVersion 20
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 4
+        versionName "1.0.3"
     }
     buildTypes {
         release {
@@ -35,4 +35,6 @@ dependencies {
     compile files('libs/date4j.jar')
     compile files('libs/YouTubeAndroidPlayerApi.jar')
     compile 'com.google.android.gms:play-services:4.4.52'
+    compile 'com.github.chrisbanes.actionbarpulltorefresh:library:+'
+    compile 'com.github.castorflex.smoothprogressbar:library:x.x.x'
 }

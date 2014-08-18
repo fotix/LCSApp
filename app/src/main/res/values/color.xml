@@ -21,8 +21,8 @@
     <color name="navdrawer_icon_tint_selected">@color/theme_primary</color>
 
     <color name="body_text_1">#deFFFFFF</color>
-    <color name="body_text_2">#8a000000</color>
-    <color name="body_text_3">#60000000</color>
+    <color name="body_text_2">#8aFFFFFF</color>
+    <color name="body_text_3">#60FFFFFF</color>
     <color name="body_text_disabled">#44000000</color>
     <color name="body_text_1_inverse">#deffffff</color>
     <color name="body_text_2_inverse">#8affffff</color>

@@ -450,7 +450,7 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
 
 
             if (pkda != null && (p.getKills() != null && p.getDeaths() != null && p.getAssists() != null))
-                pkda.setText(p.getKills() + "/" + p.getKills() + "/" + p.getAssists());
+                pkda.setText(p.getKills() + "/" + p.getDeaths() + "/" + p.getAssists());
             else
                 pkda.setText("-/-/-");
 

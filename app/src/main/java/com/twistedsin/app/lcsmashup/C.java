@@ -10,11 +10,12 @@ public class C {
     /**
      * Logging Constants
      */
-    public static boolean LOG_MODE = false;
+    public static boolean LOG_MODE = true;
     public static final boolean LOG_MODE_EXCEPTIONS = true;
     public static final String TAG = "LCSMashup";
 
     public static final int NEWS_PER_REQUEST = 10;
+    public static final int TWEETS_PER_REQUEST = 20;
 
     public static final String ICON_CHAMPION_URL = "http://lcsmashup-cdn.s3-eu-west-1.amazonaws.com/champions/";
     public static final String ICON_ITEMS_URL = "http://lcsmashup-cdn.s3-eu-west-1.amazonaws.com/items/";

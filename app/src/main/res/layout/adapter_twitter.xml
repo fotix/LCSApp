@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    android:background="@color/navdrawer_background">
+
+    <ImageView
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:id="@+id/twitter_profile_image"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"/>
+
+    <LinearLayout
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/twitter_profile_image"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/twitter_profile_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="lolesports"
+            android:textSize="18sp"
+            android:layout_marginRight="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/body_text_1"/>
+
+        <TextView
+            android:id="@+id/twitter_profile_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="\@lolesports"
+            android:textSize="16sp"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/body_text_3"/>
+
+        <TextView
+            android:id="@+id/twitter_tweet_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="15h"
+            android:gravity="right"
+            android:textSize="16sp"
+            android:textColor="@color/body_text_3"/>
+        </LinearLayout>
+
+    <TextView
+        android:id="@+id/tweet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:textSize="16sp"
+        android:textColorLink="@color/theme_primary"
+        android:textColor="@color/body_text_1"
+        android:text="BZBZBZBZ"/>
+
+    <ImageView
+        android:layout_gravity="center"
+        android:id="@+id/tweet_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/default_background"
+        android:scaleType="fitCenter"/>
+    </LinearLayout>
+</RelativeLayout>
