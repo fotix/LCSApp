@@ -1,5 +1,9 @@
 package com.twistedsin.app.lcsmashup.activities;
 
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -33,13 +37,24 @@ import com.twistedsin.app.api.responses.GameResponseNotification;
 import com.twistedsin.app.api.services.ApiServices;
 import com.twistedsin.app.lcsmashup.C;
 import com.twistedsin.app.lcsmashup.R;
+import com.twistedsin.app.lcsmashup.caching.Cache;
 import com.twistedsin.app.lcsmashup.fragments.FragmentScheduleDay;
+import com.twistedsin.app.lcsmashup.notifications.DataNotification;
+import com.twistedsin.app.lcsmashup.notifications.ReceiverAlarm;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by Filipe Oliveira on 10-07-2014.
  */
 public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 
+    private AlarmManager am;
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
     public static String TAG = "ActivityGame";
 
     public TextView BlueScore;
@@ -65,6 +80,7 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
     private RelativeLayout spoilerLayout;
     boolean isValidGame = false;
     Switch spoilerSwitch;
+    Match m;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +91,15 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
         loading = (RelativeLayout) findViewById(R.id.activity_game_loadinglayout);
         nogame = (RelativeLayout) findViewById(R.id.activity_game_nogame);
         spoilerLayout = (RelativeLayout) findViewById(R.id.activity_game_spoiler_layout);
+
+        am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        noGames = (TextView) findViewById(R.id.activity_game_no_games);
+        noGames.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onAlert();
+            }
+        });
 
         if(C.spoilers)
             spoilerLayout.setVisibility(View.GONE);
@@ -89,7 +114,7 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
         value = getIntent().getExtras().getInt("index");
         gameNumber = getIntent().getExtras().getInt("gamenumber");
 
-        Match m = FragmentScheduleDay.MatchList.get(value);
+        m = FragmentScheduleDay.MatchList.get(value);
 
         if (m != null) {
             totalGames = Integer.valueOf(m.getResult().size());
@@ -108,7 +133,7 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
 
         scrollView = (ScrollView) findViewById(R.id.activity_game_scrollview);
 
-        noGames = (TextView) findViewById(R.id.activity_game_no_games);
+
         matchDetailsLayout = (FrameLayout) findViewById(R.id.activity_game_details);
 
         BlueTeamName = (TextView) findViewById(R.id.activity_game_blueteam_name);
@@ -161,7 +186,10 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
             loading.setVisibility(View.GONE);
             youTubeView.setVisibility(View.GONE);
             noGames.setVisibility(View.VISIBLE);
-            noGames.setText("This game will be played on: " + m.getDateTime());
+            if(m.getIsLive()){
+                noGames.setText("This game is currently LIVE");
+            }else
+                noGames.setText("This game will be played on: " + m.getDateTime() + " (GMT)");
         } else {
             if (isValidGame) {
                 ApiServices.getGame(m.getResult().get("game" + (gameNumber - 1)).getId());
@@ -170,7 +198,78 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
             }
         }
     }
+    private void onAlert(){
 
+        if(m.getMatchId() != null) {
+            DataNotification alert = Cache.alertsCache.getAlertByHash(m.getMatchId());
+            Intent intent = new Intent(this, ReceiverAlarm.class);
+            intent.setAction(C.ALARM_NAME);
+
+            if (alert != null) {
+                Cache.alertsCache.deleteAlert(alert.id);
+                intent.putExtra("id", alert.id);
+
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+                am.cancel(pendingIntent);
+                Toast.makeText(this, R.string.Toast_Info_AlertRemoved, Toast.LENGTH_SHORT).show();
+            } else {
+
+                alert = new DataNotification();
+
+                alert.hash = m.getMatchId();
+                alert.title = m.getName();
+
+                Date matchDate = new Date();
+
+                try {
+                    matchDate = format.parse(m.getDateTime());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(matchDate);
+                calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+
+                int minutes = calendar.get(Calendar.MINUTE);
+                int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                String time = hour+":"+minutes;
+
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                int month = calendar.get(Calendar.MONTH);
+                int year = calendar.get(Calendar.YEAR);
+                String date = day+"/"+month+"/"+year;
+
+                if(C.LOG_MODE) C.logW("NOTIFICATION DATE TIME: "+date+ " - "+time);
+
+                Calendar calTest = Calendar.getInstance();
+                calTest.setTimeInMillis(System.currentTimeMillis());
+
+                alert.startDate = calendar;
+                alert.id = Cache.alertsCache.createAlert(alert);
+
+
+                intent.putExtra("id", alert.id);
+                intent.putExtra("title", alert.title);
+                intent.putExtra("startDate", alert.startDate);
+
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+                am.set(AlarmManager.RTC_WAKEUP, alert.startDate.getTimeInMillis() - (5 * 60 * 1000),
+                        pendingIntent);
+
+                Toast.makeText(this,R.string.Toast_Info_AlertScheduled, Toast.LENGTH_SHORT)
+                        .show();
+            }
+
+
+
+        }
+        setResult(Activity.RESULT_OK);
+
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -501,5 +600,17 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+            getActionBar().hide();
+//            if (youTubePlayer != null)
+//                youTubePlayer.setFullscreen(true);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+//            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+            getActionBar().show();
+//            if (youTubePlayer != null)
+//                youTubePlayer.setFullscreen(false);
+        }
     }
 }

@@ -19,6 +19,7 @@ import com.twistedsin.app.api.messages.EventBusManager;
 import com.twistedsin.app.api.models.News.News;
 import com.twistedsin.app.api.responses.NewsResponseNotification;
 import com.twistedsin.app.api.services.ApiServices;
+import com.twistedsin.app.lcsmashup.Base;
 import com.twistedsin.app.lcsmashup.C;
 import com.twistedsin.app.lcsmashup.R;
 import com.twistedsin.app.lcsmashup.adapters.AdapterNews;
@@ -68,6 +69,27 @@ public class ActivityDashboard extends BaseActivity {
         newsList = new ArrayList();
         newsListview = (ListView) findViewById(R.id.newsList);
 
+        if (!Base.isInitialized())
+        {
+            new Thread(new Runnable()
+            {
+
+                @Override
+                public void run()
+                {
+
+
+                    Base.initializeInfrastructure(getBaseContext(),false);
+
+
+
+
+                }
+            }).start();
+
+        }
+
+
         newsListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -103,6 +125,9 @@ public class ActivityDashboard extends BaseActivity {
 
         adapter = new AdapterNews(getApplicationContext(), newsList);
         newsListview.setAdapter(adapter);
+
+
+
     }
 
     @Override

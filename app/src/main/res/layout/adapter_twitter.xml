@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="lolesports"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:layout_marginRight="10dp"
             android:textStyle="bold"
             android:textColor="@color/body_text_1"/>
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="\@lolesports"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:layout_marginRight="10dp"
             android:textColor="@color/body_text_3"/>
 
@@ -50,9 +50,14 @@
             android:layout_height="wrap_content"
             android:text="15h"
             android:gravity="right"
-            android:textSize="16sp"
+            android:textSize="14sp"
+            android:singleLine="true"
             android:textColor="@color/body_text_3"/>
         </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"/>
 
     <TextView
         android:id="@+id/tweet"

@@ -36,6 +36,17 @@ public class Tweet {
     @SerializedName("retweeted")
     private Boolean retweeted;
 
+    @SerializedName("retweeted_status")
+    private Tweet retweeted_status;
+
+    public Tweet getRetweeted_status() {
+        return retweeted_status;
+    }
+
+    public void setRetweeted_status(Tweet retweeted_status) {
+        this.retweeted_status = retweeted_status;
+    }
+
     public Boolean getRetweeted() {
         return retweeted;
     }

@@ -8,11 +8,14 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
+
+
     <uses-sdk
         android:minSdkVersion="10"
         android:targetSdkVersion="19"/>
 
     <application
+        android:name=".Base"
         android:allowBackup="true"
         android:icon="@drawable/image200bright"
         android:label="@string/app_name"
@@ -80,6 +83,21 @@
             android:configChanges="orientation|screenSize"
             >
         </activity>
+
+        <activity
+            android:name="com.twistedsin.app.lcsmashup.activities.ActivityLiveStream"
+            android:theme="@style/AppTheme"
+            android:configChanges="orientation|screenSize"
+            >
+        </activity>
+
+
+        <receiver android:name=".notifications.ReceiverAlarm" >
+            <intent-filter>
+                <action android:name="com.twistedsin.app.lcsmashup.ALERT" >
+                </action>
+            </intent-filter>
+        </receiver>
 
     </application>
 

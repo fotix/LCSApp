@@ -79,15 +79,18 @@ public class AdapterTwitter extends BaseAdapter {
             holder.profileImage = (ImageView) convertView.findViewById(R.id.twitter_profile_image);
 
 
-
-
             convertView.setTag(holder);
         } else {
             holder = (Holder) convertView.getTag();
         }
 
         if (tweets.get(position).getText() != null) {
-            holder.tweet.setText(tweets.get(position).getText());
+
+            if(tweets.get(position).getRetweeted_status() != null)
+            {
+                holder.tweet.setText(tweets.get(position).getRetweeted_status().getText());
+            }else
+                holder.tweet.setText(tweets.get(position).getText());
 
 
             Linkify.TransformFilter filter = new Linkify.TransformFilter() {
@@ -107,32 +110,41 @@ public class AdapterTwitter extends BaseAdapter {
             Pattern urlPattern = Patterns.WEB_URL;
             Linkify.addLinks(holder.tweet, urlPattern, null, null, filter);
 
-            if(tweets.get(position).getEntities().getMedia().size() != 0) {
+            if (tweets.get(position).getEntities().getMedia().size() != 0) {
                 holder.tweetImage.setVisibility(View.VISIBLE);
                 Picasso.with(context).load(tweets.get(position).getEntities().getMedia().get(0).getMediaUrl()).into(holder.tweetImage);
-            }else
+            } else
                 holder.tweetImage.setVisibility(View.GONE);
         } else
             holder.tweet.setText("NULL");
 
-        holder.profileName.setText(tweets.get(position).getUser().getName());
-        holder.profileTag.setText("@"+tweets.get(position).getUser().getScreenName());
-//        holder.tweetTime.setText(tweets.get(position).getDateCreated());
+        if (tweets.get(position).getRetweeted_status() != null) {
 
-        setTime(holder.tweetTime, tweets.get(position).getDateCreated());
-        Picasso.with(context).load(tweets.get(position).getUser().getProfileImageUrl()).into(holder.profileImage);
+            holder.profileName.setText(tweets.get(position).getRetweeted_status().getUser().getName());
+            holder.profileTag.setText("@" + tweets.get(position).getRetweeted_status().getUser().getScreenName());
 
+            setTime(holder.tweetTime, tweets.get(position).getRetweeted_status().getDateCreated());
+            Picasso.with(context).load(tweets.get(position).getRetweeted_status().getUser().getProfileImageUrl()).into(holder.profileImage);
+
+        } else {
+
+            holder.profileName.setText(tweets.get(position).getUser().getName());
+            holder.profileTag.setText("@" + tweets.get(position).getUser().getScreenName());
+
+            setTime(holder.tweetTime, tweets.get(position).getDateCreated());
+            Picasso.with(context).load(tweets.get(position).getUser().getProfileImageUrl()).into(holder.profileImage);
+        }
         return convertView;
-}
+    }
 
     private void setTime(TextView tweetTime, String dateCreated) {
         Date d = null;
 
-       d = parseTwitterDate(dateCreated);
+        d = parseTwitterDate(dateCreated);
 
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         long currentTime = cal.getTimeInMillis();
-        long milliseconds =  currentTime - d.getTime();
+        long milliseconds = currentTime - d.getTime();
 
 
         tweetTime.setText(getTimeText(milliseconds));
@@ -141,24 +153,45 @@ public class AdapterTwitter extends BaseAdapter {
     }
 
     private String getTimeText(long diff) {
-        diff = diff/1000;
-        if (diff <= 1) {return "0s";}
-        if (diff < 20) {return diff + "s";}
-        if (diff < 40) {return "<30s";}
-        if (diff < 60) {return "<1m";}
-        if (diff <= 90) {return "1m";}
-        if (diff <= 3540) {return  Math.round(diff / 60) + "m";}
-        if (diff <= 5400) {return "1h";}
-        if (diff <= 86400) {return Math.round(diff / 3600) + "h";}
-        if (diff <= 129600) {return "1d";}
-        if (diff < 604800) {return Math.round(diff / 86400) + "d";}
-        if (diff <= 777600) {return ">1w";}
+        diff = diff / 1000;
+        if (diff <= 1) {
+            return "0s";
+        }
+        if (diff < 20) {
+            return diff + "s";
+        }
+        if (diff < 40) {
+            return "<30s";
+        }
+        if (diff < 60) {
+            return "<1m";
+        }
+        if (diff <= 90) {
+            return "1m";
+        }
+        if (diff <= 3540) {
+            return Math.round(diff / 60) + "m";
+        }
+        if (diff <= 5400) {
+            return "1h";
+        }
+        if (diff <= 86400) {
+            return Math.round(diff / 3600) + "h";
+        }
+        if (diff <= 129600) {
+            return "1d";
+        }
+        if (diff < 604800) {
+            return Math.round(diff / 86400) + "d";
+        }
+        if (diff <= 777600) {
+            return ">1w";
+        }
 
         return "-";
     }
 
-    public Date parseTwitterDate(String date)
-    {
+    public Date parseTwitterDate(String date) {
 
 
         final String TWITTER = "EEE MMM dd HH:mm:ss Z yyyy";
@@ -175,12 +208,12 @@ public class AdapterTwitter extends BaseAdapter {
     }
 
     static class Holder {
-    public TextView tweet;
-    public TextView profileName;
-    public TextView profileTag;
-    public TextView tweetTime;
-    public ImageView profileImage;
-    public ImageView tweetImage;
+        public TextView tweet;
+        public TextView profileName;
+        public TextView profileTag;
+        public TextView tweetTime;
+        public ImageView profileImage;
+        public ImageView tweetImage;
 
-}
+    }
 }

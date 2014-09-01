@@ -8,6 +8,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AbsListView;
@@ -16,6 +19,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
 import com.twistedsin.app.api.models.Twitter.Authenticated;
 import com.twistedsin.app.api.models.Twitter.Tweet;
@@ -36,9 +41,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -58,9 +66,9 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
     public final static String TwitterTokenURL = "https://api.twitter.com/oauth2/token";
     public final static String TwitterStreamURL = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=";
 
-    final static String ScreenName = "lolesports";
+    public static String ScreenName = "lolesports";
 
-    ArrayList<Tweet> tweetList  = new ArrayList<Tweet>();
+    ArrayList<Tweet> tweetList = new ArrayList<Tweet>();
     boolean isLoading = false;
     private PullToRefreshLayout mPullToRefreshLayout;
     private ListView tweetFeedListview;
@@ -79,11 +87,15 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
         ActionBar ab = getActionBar();
         ab.setTitle("Live Feed");
 
+        AdView adView = (AdView) this.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
         tweetList = new ArrayList<Tweet>();
         sinceID = lastTweetID;
         lastTweetID = "0";
 
-        loadingLayout = (RelativeLayout)findViewById( R.id.activity_livefeed_loadinglayout);
+        loadingLayout = (RelativeLayout) findViewById(R.id.activity_livefeed_loadinglayout);
 
         tweetFeedListview = (ListView) findViewById(R.id.activity_livefeed_listview);
 
@@ -119,11 +131,62 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
                 .getHeaderTransformer();
         transformer.setProgressBarColor(getResources().getColor(R.color.theme_primary));
 
-        if(tweetList.size()  == 0)
+        if (tweetList.size() == 0)
             downloadTweets();
 
         adapter = new AdapterTwitter(getBaseContext(), tweetList);
         tweetFeedListview.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_livefeed_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.item_twitter_lolesports:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                } else {
+                    item.setChecked(true);
+                    getNewTwitterFeed("lolesports");
+                }
+                break;
+            case R.id.item_twitter_esportspedia:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                } else {
+                    item.setChecked(true);
+                    getNewTwitterFeed("eSPediaLive");
+                }
+
+                break;
+            case R.id.item_twitter_esportspedia2:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                } else {
+                    item.setChecked(true);
+                    getNewTwitterFeed("eSPediaLive2");
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void getNewTwitterFeed(String newScreenName)
+    {
+        loadingLayout.setVisibility(View.VISIBLE);
+        ScreenName = newScreenName;
+        tweetList.clear();
+        sinceID = "0";
+        lastTweetID = "0";
+        downloadTweets();
     }
 
     @Override
@@ -152,7 +215,7 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
     }
 
 
-    private class GetMoreTweetsTask extends AsyncTask<String, Void, String>{
+    private class GetMoreTweetsTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... screenNames) {
@@ -160,7 +223,7 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
 
             if (C.LOG_MODE) C.logW("CALLING GET MORE TWEETS !!!!!!!!!!!!!!");
             if (screenNames.length > 0) {
-                result = getTwitterStream(screenNames[0],false);
+                result = getTwitterStream(screenNames[0], false);
             }
             return result;
         }
@@ -170,10 +233,10 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
             Twitter twits = jsonToTwitter(result);
             if (C.LOG_MODE) C.logI(result);
 
-            handleTwits(twits);
+            handleTwits(twits, false);
 
             sinceID = tweetList.get(0).getId();
-            lastTweetID = tweetList.get(tweetList.size()-1).getId();
+            lastTweetID = tweetList.get(tweetList.size() - 1).getId();
 
             isLoading = false;
             setProgressBarIndeterminateVisibility(false);
@@ -188,7 +251,7 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
             String result = null;
 
             if (screenNames.length > 0) {
-                result = getTwitterStream(screenNames[0],true);
+                result = getTwitterStream(screenNames[0], true);
             }
 
             return result;
@@ -199,8 +262,8 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
         protected void onPostExecute(String result) {
             Twitter twits = jsonToTwitter(result);
 
-            handleTwits(twits);
-            if(tweetList.size() > 0) {
+            handleTwits(twits, true);
+            if (tweetList.size() > 0) {
                 sinceID = tweetList.get(0).getId();
                 lastTweetID = tweetList.get(tweetList.size() - 1).getId();
             }
@@ -211,12 +274,15 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
 
     }
 
-    private void handleTwits(Twitter twits){
-        // lets write the results to the console as well
+    private void handleTwits(Twitter twits, boolean addOnTop) {
+        ArrayList<Tweet> aux = new ArrayList<Tweet>();
+
         for (Tweet tweet : twits) {
 
-
-                if(C.LOG_MODE) C.logI(tweet.getId());
+            if(tweet.getRetweeted_status() != null)
+                if (C.LOG_MODE) C.logI("Retweeted from: "+tweet.getRetweeted_status().getUser().getName());
+            else
+                if (C.LOG_MODE) C.logI("This tweet is not retweeted");
 
 
             if (tweet.getEntities() != null) {
@@ -229,18 +295,18 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
 //                    C.logI("IMG ENTITIES URL: " + tweet.getEntities().getData().get(0).getUrl());
 
                     String s = tweet.getText();
-                    s = s.replace(tweet.getEntities().getData().get(0).getUrl(),tweet.getEntities().getData().get(0).getExpandedUrl());
+                    s = s.replace(tweet.getEntities().getData().get(0).getUrl(), tweet.getEntities().getData().get(0).getExpandedUrl());
 
                     tweet.setText(s);
                 }
 
-                if(tweet.getEntities().getMedia().size() == 0){
+                if (tweet.getEntities().getMedia().size() == 0) {
 //                    if (C.LOG_MODE) C.logI("Got Entitites but no MEDIA");
-                }else {
+                } else {
 //                    C.logI("IMG MEDIA URL: " + tweet.getEntities().getMedia().get(0).getMediaUrl());
 
                     String s = tweet.getText();
-                    s = s.replace(tweet.getEntities().getMedia().get(0).getUrl()," ");
+                    s = s.replace(tweet.getEntities().getMedia().get(0).getUrl(), " ");
 
                     tweet.setText(s);
                 }
@@ -250,13 +316,37 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
 //                    if (C.LOG_MODE) C.logI("No entitites found");
             }
 
-
-            AddTweet(tweet);
+            if (addOnTop)
+                aux.add(tweet);
+            else
+                AddTweet(tweet);
         }
+
+        if (addOnTop)
+            AddTweetOnTop(aux);
     }
 
     // converts a string of JSON data into a Twitter object
     private Twitter jsonToTwitter(String result) {
+
+        //Write the twitter json to the sdcard
+        //DEBUG purpose only
+//        File myFile = new File("/sdcard/lcsmashup/mysdfile.txt");
+//        try {
+//            myFile.createNewFile();
+//            FileOutputStream fOut = new FileOutputStream(myFile);
+//            OutputStreamWriter myOutWriter =
+//                    new OutputStreamWriter(fOut);
+//
+//            myOutWriter.append(result);
+//
+//            myOutWriter.close();
+//            fOut.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+
         Twitter twits = null;
         if (result != null && result.length() > 0) {
             try {
@@ -306,13 +396,16 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
                 sb.append(reason);
             }
         } catch (UnsupportedEncodingException ex) {
+            ex.printStackTrace();
         } catch (ClientProtocolException ex1) {
+            ex1.printStackTrace();
         } catch (IOException ex2) {
+            ex2.printStackTrace();
         }
         return sb.toString();
     }
 
-    private String getTwitterStream(String screenName,boolean isRefresh) {
+    private String getTwitterStream(String screenName, boolean isRefresh) {
         String results = null;
 
         // Step 1: Encode consumer key and secret
@@ -343,14 +436,13 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
 
                 // Step 3: Authenticate API requests with bearer token
                 HttpGet httpGet;
-                if(isRefresh) {
-                    if(sinceID.equals("0"))
+                if (isRefresh) {
+                    if (sinceID.equals("0"))
                         httpGet = new HttpGet(TwitterStreamURL + screenName);
                     else
-                        httpGet = new HttpGet(TwitterStreamURL + screenName + "&since_id="+sinceID);
-                }
-                else
-                    httpGet = new HttpGet(TwitterStreamURL + screenName+ "&max_id="+lastTweetID);
+                        httpGet = new HttpGet(TwitterStreamURL + screenName + "&since_id=" + sinceID);
+                } else
+                    httpGet = new HttpGet(TwitterStreamURL + screenName + "&max_id=" + lastTweetID);
                 // construct a normal HTTPS request and include an Authorization
                 // header with the value of Bearer <>
                 httpGet.setHeader("Authorization", "Bearer " + auth.access_token);
@@ -364,9 +456,20 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
         return results;
     }
 
-    private synchronized void AddTweet(Tweet t){
+    private synchronized void AddTweet(Tweet t) {
 
         tweetList.add(t);
+        adapter.notifyDataSetChanged();
+    }
+
+    private synchronized void AddTweetOnTop(ArrayList<Tweet> t) {
+        if (C.LOG_MODE) C.logW("Tweet list size: " + t.size());
+        ArrayList<Tweet> aux = new ArrayList<Tweet>();
+        aux.addAll(t);
+        aux.addAll(tweetList);
+        if (C.LOG_MODE) C.logW("aux list size: " + aux.size());
+        tweetList.clear();
+        tweetList.addAll(aux);
         adapter.notifyDataSetChanged();
     }
 }

@@ -24,11 +24,10 @@
 
             <ImageView
                 android:id="@+id/iv_about"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
                 android:layout_gravity="center"
-
-                android:layout_marginTop="25dp"
+                android:layout_margin="25dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/image200" />
 
@@ -94,7 +93,6 @@
                     android:text="Remember to rate the application here!"/>
                 </LinearLayout>
         </LinearLayout>
-
     </FrameLayout>
 
     <include layout="@layout/navdrawer_for_ab_overlay"></include>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/game_selector_menu"
+        android:checkableBehavior="single">
+        <item android:id="@+id/item_twitter_lolesports" android:title="\@lolesports" android:checked="true" />
+        <item android:id="@+id/item_twitter_esportspedia" android:title="\@eSportspediaLive" />
+        <item android:id="@+id/item_twitter_esportspedia2" android:title="\@eSportspediaLive2" />
+            </group>
+</menu>

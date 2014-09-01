@@ -51,7 +51,8 @@ public class BaseActivity extends Activity{
     protected static final int NAVDRAWER_ITEM_NEWS = 0;
     protected static final int NAVDRAWER_ITEM_SCHEDULE = 1;
     protected static final int NAVDRAWER_ITEM_LIVEFEED = 2;
-    protected static final int NAVDRAWER_ITEM_ABOUT = 3;
+    protected static final int NAVDRAWER_ITEM_LIVESTREAM = 3;
+    protected static final int NAVDRAWER_ITEM_ABOUT = 4;
 
 
 
@@ -64,6 +65,7 @@ public class BaseActivity extends Activity{
             R.string.navdrawer_item_news,
             R.string.navdrawer_item_schedule,
             R.string.navdrawer_item_livefeed,
+            R.string.navdrawer_item_livestream,
             R.string.navdrawer_item_about,
 
     };
@@ -72,6 +74,7 @@ public class BaseActivity extends Activity{
             R.drawable.ic_drawer_map,  // News
             R.drawable.ic_drawer_my_schedule,  // Schedule
             R.drawable.ic_twitter,  // Live Feed
+            R.drawable.ic_action_video,  // Live Stream
             R.drawable.ic_action_about,  // about
     };
 
@@ -100,7 +103,7 @@ public class BaseActivity extends Activity{
 
         ActionBar ab = getActionBar();
         if (ab != null) {
-            if(C.spoilers) C.logW("action bar is not null");
+//            if(C.spoilers) C.logW("action bar is not null");
             ab.setDisplayHomeAsUpEnabled(true);
         }
 //        mLPreviewUtils = LPreviewUtils.getInstance(this);
@@ -171,13 +174,13 @@ public class BaseActivity extends Activity{
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (mDrawerLayout == null) {
-            if(C.LOG_MODE) C.logW("Drawer Layout is NULL");
+//            if(C.LOG_MODE) C.logW("Drawer Layout is NULL");
             return;
         }
-        if(C.LOG_MODE) C.logW("Drawer Layout is OK");
+//        if(C.LOG_MODE) C.logW("Drawer Layout is OK");
 
         if (selfItem == NAVDRAWER_ITEM_INVALID) {
-            if(C.LOG_MODE) C.logW("SELF ITEM: "+selfItem);
+//            if(C.LOG_MODE) C.logW("SELF ITEM: "+selfItem);
             // do not show a nav drawer
             View navDrawer = mDrawerLayout.findViewById(R.id.navdrawer);
             if (navDrawer != null) {
@@ -187,7 +190,7 @@ public class BaseActivity extends Activity{
             return;
         }
 
-        if(C.LOG_MODE) C.logW("SELF ITEM:"+ selfItem);
+//        if(C.LOG_MODE) C.logW("SELF ITEM:"+ selfItem);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
@@ -277,23 +280,24 @@ public class BaseActivity extends Activity{
     /** Populates the navigation drawer with the appropriate items. */
     private void populateNavDrawer() {
         mNavDrawerItems.clear();
-        if(C.LOG_MODE) C.logW("Populating Nav Drawer");
+//        if(C.LOG_MODE) C.logW("Populating Nav Drawer");
         mNavDrawerItems.add(NAVDRAWER_ITEM_NEWS);
         mNavDrawerItems.add(NAVDRAWER_ITEM_SCHEDULE);
         mNavDrawerItems.add(NAVDRAWER_ITEM_LIVEFEED);
+        mNavDrawerItems.add(NAVDRAWER_ITEM_LIVESTREAM);
         mNavDrawerItems.add(NAVDRAWER_ITEM_ABOUT);
 
         createNavDrawerItems();
     }
 
     private void createNavDrawerItems() {
-        if(C.LOG_MODE) C.logW("Creating Nav Drawer Items");
+//        if(C.LOG_MODE) C.logW("Creating Nav Drawer Items");
         mDrawerItemsListContainer = (ViewGroup) findViewById(R.id.navdrawer_items_list);
         if (mDrawerItemsListContainer == null) {
-            if(C.LOG_MODE) C.logW("Item list Container is null");
+//            if(C.LOG_MODE) C.logW("Item list Container is null");
             return;
         }
-        if(C.LOG_MODE) C.logW("Item list Container is OK - size:"+ mNavDrawerItems.size());
+//        if(C.LOG_MODE) C.logW("Item list Container is OK - size:"+ mNavDrawerItems.size());
         mNavDrawerItemViews = new View[mNavDrawerItems.size()];
         mDrawerItemsListContainer.removeAllViews();
 
@@ -302,7 +306,7 @@ public class BaseActivity extends Activity{
 
             mNavDrawerItemViews[i] = makeNavDrawerItem(itemId, mDrawerItemsListContainer);
             mDrawerItemsListContainer.addView(mNavDrawerItemViews[i]);
-            if(C.LOG_MODE) C.logW("Adding: "+itemId);
+//            if(C.LOG_MODE) C.logW("Adding: "+itemId);
                 ++i;
         }
     }
@@ -401,6 +405,13 @@ public class BaseActivity extends Activity{
                 break;
             case NAVDRAWER_ITEM_LIVEFEED:
                 intent = new Intent(this, ActivityLiveFeed.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+                finish();
+                break;
+            case NAVDRAWER_ITEM_LIVESTREAM:
+                intent = new Intent(this, ActivityLiveStream.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
                 overridePendingTransition(0, 0);

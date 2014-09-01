@@ -229,6 +229,11 @@ public class FragmentScheduleDay extends Fragment {
 
         if (p != null) {
             if(C.LOG_MODE) C.logE(p.getLabel());
+            if(p.getTournamentId() == null || p.getTournamentId().equals(" "))
+            {
+                checkLoadingState();
+                return;
+            }
             BlockList.put(p.getTournamentId(), p);
 
             for (int i = 0; i < p.getMatches().size(); i++) {
@@ -355,6 +360,8 @@ public class FragmentScheduleDay extends Fragment {
 
         if (endLoading) {
             loadingLayout.setVisibility(View.INVISIBLE);
+            if(MatchIdList.isEmpty())
+                noMatches.setVisibility(View.VISIBLE);
 //                loadingState.setLoading(false);
         }
     }

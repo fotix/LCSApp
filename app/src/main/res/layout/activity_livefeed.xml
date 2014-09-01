@@ -14,9 +14,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false">
-
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout
             android:id="@+id/activity_livefeed_layout"
+            android:layout_above="@+id/adView"
             android:layout_width="match_parent"
 
             android:layout_height="match_parent">
@@ -29,6 +32,18 @@
 
         </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
 
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentBottom="true"
+            android:background="#E1E1E1"
+            ads:adSize="SMART_BANNER"
+            ads:adUnitId="ca-app-pub-8843054719237547/7644541110"
+
+            />
+        </RelativeLayout>
         <RelativeLayout
             android:id="@+id/activity_livefeed_loadinglayout"
             android:layout_width="match_parent"
