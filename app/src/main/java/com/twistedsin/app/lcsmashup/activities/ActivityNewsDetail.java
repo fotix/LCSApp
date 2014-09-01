@@ -88,8 +88,6 @@ public class ActivityNewsDetail extends Activity {
             Picasso.with(getApplicationContext()).load(n.getImageMediumUrl()).into(topImage);
 
 
-
-
         String b = n.getBody().replaceAll(System.getProperty("line.separator"), "<br>").split("<h3>Related")[0];
 
         if (C.LOG_MODE) C.logD(b);

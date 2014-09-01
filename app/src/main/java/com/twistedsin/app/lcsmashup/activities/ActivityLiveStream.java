@@ -45,7 +45,8 @@ public class ActivityLiveStream extends BaseActivity implements YouTubePlayer.On
     private YouTubePlayerFragment youTubePlayerFragment;
     public onDataDownloadedListener dataListener;
     public YouTubePlayer.OnInitializedListener youtubeInitializer;
-    private static final String LOLESPORTS_CHANNEL_ID ="UCvqRdlKsE5Q8mf8YXbdIJ";
+    private static final String LOLESPORTS_CHANNEL_ID ="UCvqRdlKsE5Q8mf8YXbdIJLw";
+    public AdView adView;
     public static final String API_KEY = "AIzaSyCAHG2RhyRuOIFJCo5purXDxwO57FPJSn0";
     public static  String VIDEO_ID;
 
@@ -66,7 +67,7 @@ public class ActivityLiveStream extends BaseActivity implements YouTubePlayer.On
                 .findFragmentById(R.id.youtubeplayerfragment);
 
         youTubePlayerFragment.initialize(API_KEY, this);
-        AdView adView = (AdView) this.findViewById(R.id.adView);
+        adView= (AdView) this.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
     }
@@ -77,8 +78,10 @@ public class ActivityLiveStream extends BaseActivity implements YouTubePlayer.On
 
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             getActionBar().hide();
+            adView.setVisibility(View.GONE);
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             getActionBar().show();
+            adView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -141,11 +144,12 @@ public class ActivityLiveStream extends BaseActivity implements YouTubePlayer.On
                     if(response != null){
 
                         if(C.LOG_MODE) C.logW("KIND: "+response.getKind());
-                        if(C.LOG_MODE) C.logW("TotalResults: "+response.getPageInfo().getResultsPerPage());
+                        if(C.LOG_MODE) C.logW("TotalResults: "+response.getPageInfo().getTotalResults());
 
                         if(response.getPageInfo().getTotalResults() > 0){
 
                             VIDEO_ID = response.getItems().get(0).getId().getVideoId();
+                            if(C.LOG_MODE) C.logW("VIDEO ID: "+VIDEO_ID );
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -154,6 +158,7 @@ public class ActivityLiveStream extends BaseActivity implements YouTubePlayer.On
                             });
 
                         }else{
+                            if(C.LOG_MODE) C.logW("No video ID was set" );
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {

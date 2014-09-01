@@ -188,6 +188,7 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
             noGames.setVisibility(View.VISIBLE);
             if(m.getIsLive()){
                 noGames.setText("This game is currently LIVE");
+                nogame.setOnClickListener(null);
             }else
                 noGames.setText("This game will be played on: " + m.getDateTime() + " (GMT)");
         } else {
