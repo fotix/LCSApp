@@ -5,8 +5,8 @@ import android.os.Bundle;
 
 import com.twistedsin.app.lcsmashup.C;
 import com.twistedsin.app.lcsmashup.R;
-import com.twistedsin.app.lcsmashup.analytics.DataType;
-import com.twistedsin.app.lcsmashup.analytics.GATracker;
+import com.twistedsin.app.lcsmashup.analyticsdata.DataType;
+import com.twistedsin.app.lcsmashup.analyticsdata.GATracker;
 import com.twistedsin.app.lcsmashup.fragments.FragmentScheduleBar;
 import com.twistedsin.app.lcsmashup.fragments.FragmentScheduleDay;
 

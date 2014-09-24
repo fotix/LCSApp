@@ -6,18 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.twistedsin.app.lcsmashup.Base;
 import com.twistedsin.app.lcsmashup.C;
 import com.twistedsin.app.lcsmashup.R;
-import com.twistedsin.app.lcsmashup.analytics.DataType;
-import com.twistedsin.app.lcsmashup.analytics.GATracker;
+import com.twistedsin.app.lcsmashup.analyticsdata.DataType;
+import com.twistedsin.app.lcsmashup.analyticsdata.GATracker;
 
 /**
  * Created by Filipe Oliveira on 31-07-2014.

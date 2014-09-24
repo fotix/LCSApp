@@ -13,8 +13,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.squareup.otto.Subscribe;
 import com.twistedsin.app.api.messages.EventBusManager;
 import com.twistedsin.app.api.models.Match.Match;
@@ -24,15 +22,14 @@ import com.twistedsin.app.api.responses.MatchResponseNotification;
 import com.twistedsin.app.api.responses.ProgrammingBlockResponseNotification;
 import com.twistedsin.app.api.responses.ProgrammingWeekResponseNotification;
 import com.twistedsin.app.api.services.ApiServices;
-import com.twistedsin.app.lcsmashup.Base;
 import com.twistedsin.app.lcsmashup.C;
 import com.twistedsin.app.lcsmashup.R;
 import com.twistedsin.app.lcsmashup.Utils.TimeZones;
 import com.twistedsin.app.lcsmashup.activities.ActivityGame;
 import com.twistedsin.app.lcsmashup.activities.ActivitySchedule;
 import com.twistedsin.app.lcsmashup.adapters.AdapterSchedule;
-import com.twistedsin.app.lcsmashup.analytics.DataType;
-import com.twistedsin.app.lcsmashup.analytics.GATracker;
+import com.twistedsin.app.lcsmashup.analyticsdata.DataType;
+import com.twistedsin.app.lcsmashup.analyticsdata.GATracker;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

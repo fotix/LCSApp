@@ -11,8 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.twistedsin.app.lcsmashup.R;
-import com.twistedsin.app.lcsmashup.analytics.DataType;
-import com.twistedsin.app.lcsmashup.analytics.GATracker;
+import com.twistedsin.app.lcsmashup.analyticsdata.DataType;
+import com.twistedsin.app.lcsmashup.analyticsdata.GATracker;
 
 /**
  * Created by Filipe Oliveira on 09-07-2014.
