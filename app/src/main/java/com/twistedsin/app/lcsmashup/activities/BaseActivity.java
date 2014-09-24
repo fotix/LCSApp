@@ -17,6 +17,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ import com.twistedsin.app.lcsmashup.C;
 import com.twistedsin.app.lcsmashup.R;
 import com.twistedsin.app.lcsmashup.Utils.LPreviewUtilsBase;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
@@ -53,7 +55,6 @@ public class BaseActivity extends Activity{
     protected static final int NAVDRAWER_ITEM_LIVEFEED = 2;
     protected static final int NAVDRAWER_ITEM_LIVESTREAM = 3;
     protected static final int NAVDRAWER_ITEM_ABOUT = 4;
-
 
 
     protected static final int NAVDRAWER_ITEM_SETTINGS = 6;
@@ -100,7 +101,7 @@ public class BaseActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        forceShowActionBarOverflowMenu();
         ActionBar ab = getActionBar();
         if (ab != null) {
 //            if(C.spoilers) C.logW("action bar is not null");
@@ -506,6 +507,19 @@ public class BaseActivity extends Activity{
 
 //        }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void forceShowActionBarOverflowMenu() {
+        try {
+            ViewConfiguration config = ViewConfiguration.get(this);
+            Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+            if (menuKeyField != null) {
+                menuKeyField.setAccessible(true);
+                menuKeyField.setBoolean(config, false);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

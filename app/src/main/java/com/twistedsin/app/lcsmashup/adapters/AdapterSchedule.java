@@ -143,7 +143,11 @@ public class AdapterSchedule extends BaseAdapter {
                 + mList.get(position).getTournament().getRound());
 
         holder.date.setText(mList.get(position).getDateTime().split("T")[1].split("Z")[0] + " (GMT)");
-        holder.ll.setBackgroundColor(Color.parseColor(mList.get(position).getColor().replace("#", "#33")));
+
+        if(mList.get(position).getColor() != null)
+            holder.ll.setBackgroundColor(Color.parseColor(mList.get(position).getColor().replace("#", "#33")));
+        else
+            holder.ll.setBackgroundColor(Color.parseColor("#33BE9356"));
 
 
         return convertView;

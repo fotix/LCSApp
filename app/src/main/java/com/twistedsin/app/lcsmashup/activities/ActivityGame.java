@@ -7,21 +7,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -35,13 +43,17 @@ import com.twistedsin.app.api.models.Game.Vods;
 import com.twistedsin.app.api.models.Match.Match;
 import com.twistedsin.app.api.responses.GameResponseNotification;
 import com.twistedsin.app.api.services.ApiServices;
+import com.twistedsin.app.lcsmashup.Base;
 import com.twistedsin.app.lcsmashup.C;
 import com.twistedsin.app.lcsmashup.R;
+import com.twistedsin.app.lcsmashup.analytics.DataType;
+import com.twistedsin.app.lcsmashup.analytics.GATracker;
 import com.twistedsin.app.lcsmashup.caching.Cache;
 import com.twistedsin.app.lcsmashup.fragments.FragmentScheduleDay;
 import com.twistedsin.app.lcsmashup.notifications.DataNotification;
 import com.twistedsin.app.lcsmashup.notifications.ReceiverAlarm;
 
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -71,16 +83,20 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
 
     String vodUrl = null;
     YouTubePlayerView youTubeView;
-    TextView noGames;
+    TextView noGames, noGamesNotifyMe;
     FrameLayout matchDetailsLayout;
     ScrollView scrollView;
     int value, gameNumber, totalGames;
     private RelativeLayout loading;
     private RelativeLayout nogame;
+    private RelativeLayout notifyMeLayout;
     private RelativeLayout spoilerLayout;
     boolean isValidGame = false;
+
+
     Switch spoilerSwitch;
     Match m;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,20 +104,28 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+        //Sending GA Screen Event
+        GATracker.getInstance().sendAnalyticsData(DataType.SCREEN, getApplicationContext(), getLocalClassName());
+
+
         loading = (RelativeLayout) findViewById(R.id.activity_game_loadinglayout);
         nogame = (RelativeLayout) findViewById(R.id.activity_game_nogame);
         spoilerLayout = (RelativeLayout) findViewById(R.id.activity_game_spoiler_layout);
+        notifyMeLayout = (RelativeLayout) findViewById(R.id.activity_game_no_games_layout);
 
         am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        noGamesNotifyMe = (TextView) findViewById(R.id.activity_game_no_games_notifyme_tv);
         noGames = (TextView) findViewById(R.id.activity_game_no_games);
-        noGames.setOnClickListener(new View.OnClickListener() {
+        noGamesNotifyMe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onAlert();
             }
         });
 
-        if(C.spoilers)
+        if (C.spoilers)
             spoilerLayout.setVisibility(View.GONE);
 
         spoilerLayout.setOnClickListener(new View.OnClickListener() {
@@ -128,11 +152,11 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
 
         }
 
+
         getActionBar().setTitle(m.getName());
         youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
 
         scrollView = (ScrollView) findViewById(R.id.activity_game_scrollview);
-
 
         matchDetailsLayout = (FrameLayout) findViewById(R.id.activity_game_details);
 
@@ -186,22 +210,25 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
             loading.setVisibility(View.GONE);
             youTubeView.setVisibility(View.GONE);
             noGames.setVisibility(View.VISIBLE);
-            if(m.getIsLive()){
+            if (m.getIsLive()) {
                 noGames.setText("This game is currently LIVE");
-                nogame.setOnClickListener(null);
-            }else
+                noGamesNotifyMe.setOnClickListener(null);
+                notifyMeLayout.setVisibility(View.GONE);
+            } else
                 noGames.setText("This game will be played on: " + m.getDateTime() + " (GMT)");
         } else {
             if (isValidGame) {
                 ApiServices.getGame(m.getResult().get("game" + (gameNumber - 1)).getId());
                 matchDetailsLayout.setVisibility(View.VISIBLE);
                 noGames.setVisibility(View.INVISIBLE);
+                notifyMeLayout.setVisibility(View.GONE);
             }
         }
     }
-    private void onAlert(){
 
-        if(m.getMatchId() != null) {
+    private void onAlert() {
+
+        if (m.getMatchId() != null) {
             DataNotification alert = Cache.alertsCache.getAlertByHash(m.getMatchId());
             Intent intent = new Intent(this, ReceiverAlarm.class);
             intent.setAction(C.ALARM_NAME);
@@ -214,6 +241,8 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
                         PendingIntent.FLAG_UPDATE_CURRENT);
                 am.cancel(pendingIntent);
                 Toast.makeText(this, R.string.Toast_Info_AlertRemoved, Toast.LENGTH_SHORT).show();
+
+                GATracker.getInstance().sendAnalyticsData(DataType.EVENT, getApplicationContext(), "GameScreen", "GameGetNotification","CancelNotification", null, getLocalClassName());
             } else {
 
                 alert = new DataNotification();
@@ -221,29 +250,34 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
                 alert.hash = m.getMatchId();
                 alert.title = m.getName();
 
+                format.setTimeZone(TimeZone.getTimeZone("UTC"));
                 Date matchDate = new Date();
 
+                if (C.LOG_MODE) C.logW("MATCH DATE: " + m.getDateTime());
                 try {
                     matchDate = format.parse(m.getDateTime());
+
+                    if (C.LOG_MODE) C.logW("MATCH MILI: " + matchDate.getTime());
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
 
+
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(matchDate);
-                calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+                calendar.setTimeZone(TimeZone.getDefault());
 
 
                 int minutes = calendar.get(Calendar.MINUTE);
                 int hour = calendar.get(Calendar.HOUR_OF_DAY);
-                String time = hour+":"+minutes;
+                String time = hour + ":" + minutes;
 
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 int month = calendar.get(Calendar.MONTH);
                 int year = calendar.get(Calendar.YEAR);
-                String date = day+"/"+month+"/"+year;
-
-                if(C.LOG_MODE) C.logW("NOTIFICATION DATE TIME: "+date+ " - "+time);
+                String date = day + "/" + month + "/" + year;
+                if (C.LOG_MODE) C.logW("NOTIFICATION MILI: " + calendar.getTimeInMillis());
+                if (C.LOG_MODE) C.logW("NOTIFICATION DATE TIME: " + date + " - " + time);
 
                 Calendar calTest = Calendar.getInstance();
                 calTest.setTimeInMillis(System.currentTimeMillis());
@@ -261,16 +295,19 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
                 am.set(AlarmManager.RTC_WAKEUP, alert.startDate.getTimeInMillis() - (5 * 60 * 1000),
                         pendingIntent);
 
-                Toast.makeText(this,R.string.Toast_Info_AlertScheduled, Toast.LENGTH_SHORT)
+                Toast.makeText(this, R.string.Toast_Info_AlertScheduled, Toast.LENGTH_SHORT)
                         .show();
-            }
 
+                GATracker.getInstance().sendAnalyticsData(DataType.EVENT, getApplicationContext(), "GameScreen", "GameGetNotification",m.getName(), null, getLocalClassName());
+            }
 
 
         }
         setResult(Activity.RESULT_OK);
 
     }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -288,10 +325,12 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
                 onBackPressed();
                 return true;
             case R.id.game1:
+                GATracker.getInstance().sendAnalyticsData(DataType.EVENT,getApplicationContext(),"GameScreen","GameNumber","1",null,getLocalClassName());
                 if (item.isChecked()) {
                     item.setChecked(false);
                 } else {
                     if (totalGames >= 1) {
+
                         Intent i = new Intent(getApplicationContext(), ActivityGame.class);
                         i.putExtra("gamenumber", 1);
                         i.putExtra("index", value);
@@ -307,10 +346,12 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
                 }
                 break;
             case R.id.game2:
+                GATracker.getInstance().sendAnalyticsData(DataType.EVENT,getApplicationContext(),"GameScreen","GameNumber","2",null,getLocalClassName());
                 if (item.isChecked()) item.setChecked(false);
                 else {
                     if (C.LOG_MODE) C.logW("GAME 2 CALLED");
                     if (totalGames >= 2) {
+
                         if (C.LOG_MODE) C.logW("GAME 2 CALLED VALID");
                         Intent i = new Intent(getApplicationContext(), ActivityGame.class);
                         i.putExtra("gamenumber", 2);
@@ -327,6 +368,7 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
                 }
                 break;
             case R.id.game3:
+                GATracker.getInstance().sendAnalyticsData(DataType.EVENT,getApplicationContext(),"GameScreen","GameNumber","3",null,getLocalClassName());
                 if (item.isChecked()) item.setChecked(false);
                 else {
                     if (totalGames >= 3) {
@@ -344,6 +386,7 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
                 }
                 break;
             case R.id.game4:
+                GATracker.getInstance().sendAnalyticsData(DataType.EVENT,getApplicationContext(),"GameScreen","GameNumber","4",null,getLocalClassName());
                 if (item.isChecked()) item.setChecked(false);
                 else {
                     if (totalGames >= 4) {
@@ -362,6 +405,7 @@ public class ActivityGame extends YouTubeBaseActivity implements YouTubePlayer.O
                 }
                 break;
             case R.id.game5:
+                GATracker.getInstance().sendAnalyticsData(DataType.EVENT,getApplicationContext(),"GameScreen","GameNumber","5",null,getLocalClassName());
                 if (item.isChecked()) item.setChecked(false);
                 else {
                     if (totalGames >= 5) {

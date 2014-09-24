@@ -6,14 +6,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.view.View;
 import android.widget.TextView;
 
-import com.twistedsin.app.api.callbacks.MatchCallback;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.twistedsin.app.lcsmashup.Base;
 import com.twistedsin.app.lcsmashup.C;
 import com.twistedsin.app.lcsmashup.R;
-
-import retrofit.RetrofitError;
+import com.twistedsin.app.lcsmashup.analytics.DataType;
+import com.twistedsin.app.lcsmashup.analytics.GATracker;
 
 /**
  * Created by Filipe Oliveira on 31-07-2014.
@@ -27,6 +31,10 @@ public class ActivityAbout extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+
+        //Sending GA Screen Event
+        GATracker.getInstance().sendAnalyticsData(DataType.SCREEN,getApplicationContext(),getLocalClassName());
+
         context = getApplicationContext();
         ActionBar ab = getActionBar();
 
@@ -40,6 +48,7 @@ public class ActivityAbout extends BaseActivity {
         rateThisApp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                GATracker.getInstance().sendAnalyticsData(DataType.EVENT,getApplicationContext(),"About","RateApp",null,null,getLocalClassName());
                 Uri uri = Uri.parse("market://details?id=" + context.getPackageName());
                 Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
                 goToMarket.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -82,5 +91,15 @@ public class ActivityAbout extends BaseActivity {
         return NAVDRAWER_ITEM_ABOUT;
     }
 
+    @Override
+    protected void onStart(){
+        super.onStart();
+//        GoogleAnalytics.getInstance(this).reportActivityStart(this);
+    }
 
+    @Override
+    protected void onStop (){
+        super.onStart();
+//        GoogleAnalytics.getInstance(this).reportActivityStop(this);
+    }
 }

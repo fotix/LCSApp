@@ -17,13 +17,18 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 import com.twistedsin.app.api.models.News.News;
+import com.twistedsin.app.lcsmashup.Base;
 import com.twistedsin.app.lcsmashup.C;
 import com.twistedsin.app.lcsmashup.R;
+import com.twistedsin.app.lcsmashup.analytics.DataType;
+import com.twistedsin.app.lcsmashup.analytics.GATracker;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -49,6 +54,10 @@ public class ActivityNewsVideo extends YouTubeBaseActivity implements YouTubePla
         setContentView(R.layout.activity_news_video);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        //Sending GA Screen Event
+        GATracker.getInstance().sendAnalyticsData(DataType.SCREEN, getApplicationContext(), getLocalClassName());
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {

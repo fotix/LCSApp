@@ -60,7 +60,6 @@ public class DataSource
         try
         {
             dbHelper.close();
-
             mutex.unlock();
         }
         catch (Exception e)

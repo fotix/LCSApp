@@ -1,17 +1,27 @@
 package com.twistedsin.app.lcsmashup.activities;
 
 import android.app.ActionBar;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.MediaController;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -20,9 +30,12 @@ import com.google.android.youtube.player.YouTubePlayerView;
 import com.google.gson.Gson;
 import com.twistedsin.app.api.models.News.News;
 import com.twistedsin.app.api.models.Youtube.YoutubeResponse;
+import com.twistedsin.app.lcsmashup.Base;
 import com.twistedsin.app.lcsmashup.C;
 import com.twistedsin.app.lcsmashup.R;
 import com.twistedsin.app.lcsmashup.Utils.onDataDownloadedListener;
+import com.twistedsin.app.lcsmashup.analytics.DataType;
+import com.twistedsin.app.lcsmashup.analytics.GATracker;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -49,7 +62,10 @@ public class ActivityLiveStream extends BaseActivity implements YouTubePlayer.On
     public AdView adView;
     public static final String API_KEY = "AIzaSyCAHG2RhyRuOIFJCo5purXDxwO57FPJSn0";
     public static  String VIDEO_ID;
+    String youtubePackageName = "com.google.android.youtube";
+    boolean isYoutubeInstalled = false;
 
+    TextView noYoutubeApp;
     RelativeLayout loadingLayout,noStreamLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,17 +75,54 @@ public class ActivityLiveStream extends BaseActivity implements YouTubePlayer.On
 
         ab.setTitle("Live Stream");
 
+        //Sending GA Screen Event
+        GATracker.getInstance().sendAnalyticsData(DataType.SCREEN, getApplicationContext(), getLocalClassName());
+
+
+        getLOLEsportsLiveStreams();
+        isYoutubeInstalled = isAppInstalled(youtubePackageName);
+        noYoutubeApp = (TextView) findViewById(R.id.activity_livestream_noyoutubeapp_tv);
+
+        if(isYoutubeInstalled)
+            noYoutubeApp.setText("Click Here to reload the Stream");
+
+        noYoutubeApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isYoutubeInstalled){
+
+                    if(VIDEO_ID != null){
+                        watchYoutubeVideo(VIDEO_ID);
+                        GATracker.getInstance().sendAnalyticsData(DataType.EVENT,getApplicationContext(),"StreamReload","StreamWatch",null,null,getLocalClassName());
+                    }
+
+                }else{
+                    GATracker.getInstance().sendAnalyticsData(DataType.EVENT,getApplicationContext(),"StreamReload","StreamGetApp",null,null,getLocalClassName());
+                    Uri uri = Uri.parse("market://details?id=com.google.android.youtube");
+                    Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                    goToMarket.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    try {
+                        getApplicationContext().startActivity(goToMarket);
+                    } catch (ActivityNotFoundException e) {
+                        C.logE("Error opening Market");
+                    }
+                }
+            }
+        });
+
         loadingLayout = (RelativeLayout) findViewById(R.id.activity_livestream_loadinglayout);
         noStreamLayout = (RelativeLayout) findViewById(R.id.activity_livestream_nostream);
         youtubeInitializer = this;
         dataListener = this;
-        youTubePlayerFragment = (YouTubePlayerFragment) getFragmentManager()
-                .findFragmentById(R.id.youtubeplayerfragment);
-
-        youTubePlayerFragment.initialize(API_KEY, this);
+//        youTubePlayerFragment = (YouTubePlayerFragment) getFragmentManager()
+//                .findFragmentById(R.id.youtubeplayerfragment);
+//
+//        youTubePlayerFragment.initialize(API_KEY, youtubeInitializer);
         adView= (AdView) this.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
+
+
     }
 
     @Override
@@ -101,11 +154,16 @@ public class ActivityLiveStream extends BaseActivity implements YouTubePlayer.On
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player,
                                         boolean wasRestored) {
-        youTubePlayer = player;
-        getLOLEsportsLiveStreams();
+//        if(!wasRestored) {
+//            youTubePlayer = player;
+//            getLOLEsportsLiveStreams();
+//        }
+
+//            player.cueVideo("XMi6WiwMtPM");
+//            watchYoutubeVideo("XMi6WiwMtPM");
 //        if(C.LOG_MODE) C.logI("VIDEO ID: "+VIDEO_ID);
 //        if(VIDEO_ID != null)
-//            player.loadVideo(VIDEO_ID);
+//            player.loadVideo("07N6bHTxOxk");
     }
 
 
@@ -159,6 +217,7 @@ public class ActivityLiveStream extends BaseActivity implements YouTubePlayer.On
 
                         }else{
                             if(C.LOG_MODE) C.logW("No video ID was set" );
+//                            VIDEO_ID = "9RcFNJHuyVU";
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -172,6 +231,14 @@ public class ActivityLiveStream extends BaseActivity implements YouTubePlayer.On
                     getRequest.abort();
                     if(C.LOG_MODE)
                         Log.w("youtube", "Error for URL " + url, e);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dataListener.onDataDownloaded(false);
+                        }
+                    });
+
                     return;
                 }
 
@@ -189,12 +256,34 @@ public class ActivityLiveStream extends BaseActivity implements YouTubePlayer.On
     public void onDataDownloaded(boolean success) {
         if(success){
             if(C.LOG_MODE) C.logW("Data downloaded with sucess, starting stream");
-            youTubePlayer.loadVideo(VIDEO_ID);
             loadingLayout.setVisibility(View.GONE);
+            watchYoutubeVideo(VIDEO_ID);
+
         }else{
             if(C.LOG_MODE) C.logW("No channels were found");
             loadingLayout.setVisibility(View.GONE);
             noStreamLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void watchYoutubeVideo(String id){
+        try{
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
+            startActivity(intent);
+        }catch (ActivityNotFoundException ex){
+            Intent intent=new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://www.youtube.com/watch?v="+id));
+            startActivity(intent);
+        }
+    }
+
+    protected boolean isAppInstalled(String packageName) {
+        Intent mIntent = getPackageManager().getLaunchIntentForPackage(packageName);
+        if (mIntent != null) {
+            return true;
+        }
+        else {
+            return false;
         }
     }
 

@@ -193,9 +193,12 @@ public class AdapterTwitter extends BaseAdapter {
 
     public Date parseTwitterDate(String date) {
 
+        if(C.LOG_MODE) C.logW("DATE TO PARSE: "+date);
+
+
 
         final String TWITTER = "EEE MMM dd HH:mm:ss Z yyyy";
-        SimpleDateFormat sf = new SimpleDateFormat(TWITTER);
+        SimpleDateFormat sf = new SimpleDateFormat(TWITTER,Locale.US);
         sf.setLenient(true);
 
         try {
@@ -203,8 +206,11 @@ public class AdapterTwitter extends BaseAdapter {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+
         }
-        return null;
+        Date s = new Date();
+        s.setTime(System.currentTimeMillis());
+        return s;
     }
 
     static class Holder {

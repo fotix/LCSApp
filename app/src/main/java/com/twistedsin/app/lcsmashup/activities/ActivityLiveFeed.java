@@ -21,14 +21,19 @@ import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.twistedsin.app.api.models.Twitter.Authenticated;
 import com.twistedsin.app.api.models.Twitter.Tweet;
 import com.twistedsin.app.api.models.Twitter.Twitter;
 import com.twistedsin.app.api.services.ApiServices;
+import com.twistedsin.app.lcsmashup.Base;
 import com.twistedsin.app.lcsmashup.C;
 import com.twistedsin.app.lcsmashup.R;
 import com.twistedsin.app.lcsmashup.adapters.AdapterTwitter;
+import com.twistedsin.app.lcsmashup.analytics.DataType;
+import com.twistedsin.app.lcsmashup.analytics.GATracker;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -87,6 +92,10 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
         ActionBar ab = getActionBar();
         ab.setTitle("Live Feed");
 
+
+        //Sending GA Screen Event
+        GATracker.getInstance().sendAnalyticsData(DataType.SCREEN, getApplicationContext(), getLocalClassName());
+
         AdView adView = (AdView) this.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
@@ -111,6 +120,7 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
                     if (isLoading == false) {
                         setProgressBarIndeterminateVisibility(true);
                         isLoading = true;
+                        GATracker.getInstance().sendAnalyticsData(DataType.EVENT,getApplicationContext(),"TwitterScreen","TwitterLoadPrevious",null,null,getLocalClassName());
                         new GetMoreTweetsTask().execute(ScreenName);
                     }
                 }
@@ -151,6 +161,7 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
         int id = item.getItemId();
         switch (id) {
             case R.id.item_twitter_lolesports:
+                GATracker.getInstance().sendAnalyticsData(DataType.EVENT,getApplicationContext(),"TwitterScreen","TwitterFeed","lolesports",null,getLocalClassName());
                 if (item.isChecked()) {
                     item.setChecked(false);
                 } else {
@@ -159,6 +170,7 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
                 }
                 break;
             case R.id.item_twitter_esportspedia:
+                GATracker.getInstance().sendAnalyticsData(DataType.EVENT,getApplicationContext(),"TwitterScreen","TwitterFeed","esportspedialive",null,getLocalClassName());
                 if (item.isChecked()) {
                     item.setChecked(false);
                 } else {
@@ -168,6 +180,7 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
 
                 break;
             case R.id.item_twitter_esportspedia2:
+                GATracker.getInstance().sendAnalyticsData(DataType.EVENT,getApplicationContext(),"TwitterScreen","TwitterFeed","esportspedialive2",null,getLocalClassName());
                 if (item.isChecked()) {
                     item.setChecked(false);
                 } else {
@@ -197,6 +210,7 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
 
     @Override
     public void onRefreshStarted(View view) {
+        GATracker.getInstance().sendAnalyticsData(DataType.EVENT,getApplicationContext(),"TwitterScreen","TwitterLoadNew",null,null,getLocalClassName());
         downloadTweets();
     }
 
@@ -262,7 +276,9 @@ public class ActivityLiveFeed extends BaseActivity implements OnRefreshListener 
         protected void onPostExecute(String result) {
             Twitter twits = jsonToTwitter(result);
 
-            handleTwits(twits, true);
+            if(twits != null)
+                handleTwits(twits, true);
+
             if (tweetList.size() > 0) {
                 sinceID = tweetList.get(0).getId();
                 lastTweetID = tweetList.get(tweetList.size() - 1).getId();

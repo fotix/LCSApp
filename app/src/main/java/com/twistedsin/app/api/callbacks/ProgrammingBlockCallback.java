@@ -1,6 +1,7 @@
 package com.twistedsin.app.api.callbacks;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.twistedsin.app.api.messages.EventBusManager;
 import com.twistedsin.app.api.messages.ResponseNotification;
 import com.twistedsin.app.api.models.Programming.ProgrammingBlock;
@@ -42,6 +43,8 @@ public class ProgrammingBlockCallback extends GenericCallback<Response>{
 
         } catch (IOException e) {
             e.printStackTrace();
+        }catch (JsonSyntaxException ex){
+            ex.printStackTrace();
         }
 
         EventBusManager.post(notification);

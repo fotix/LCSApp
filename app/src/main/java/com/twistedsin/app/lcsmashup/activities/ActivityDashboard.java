@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+
 import com.squareup.otto.Subscribe;
 import com.twistedsin.app.api.messages.EventBusManager;
 import com.twistedsin.app.api.models.News.News;
@@ -23,6 +24,8 @@ import com.twistedsin.app.lcsmashup.Base;
 import com.twistedsin.app.lcsmashup.C;
 import com.twistedsin.app.lcsmashup.R;
 import com.twistedsin.app.lcsmashup.adapters.AdapterNews;
+import com.twistedsin.app.lcsmashup.analytics.DataType;
+import com.twistedsin.app.lcsmashup.analytics.GATracker;
 
 import java.util.ArrayList;
 
@@ -44,6 +47,9 @@ public class ActivityDashboard extends BaseActivity {
         setContentView(R.layout.activity_new_dashboard);
 
         EventBusManager.register(this);
+
+        //Sending GA Screen Event
+        GATracker.getInstance().sendAnalyticsData(DataType.SCREEN,getApplicationContext(),getLocalClassName());
 
 //        getLPreviewUtils().trySetActionBar();
 
@@ -73,17 +79,10 @@ public class ActivityDashboard extends BaseActivity {
         {
             new Thread(new Runnable()
             {
-
                 @Override
                 public void run()
                 {
-
-
                     Base.initializeInfrastructure(getBaseContext(),false);
-
-
-
-
                 }
             }).start();
 
@@ -115,6 +114,7 @@ public class ActivityDashboard extends BaseActivity {
                 if (firstVisibleItem + visibleItemCount == totalItemCount && totalItemCount != 0) {
                     if (isLoading == false) {
                         isLoading = true;
+                        GATracker.getInstance().sendAnalyticsData(DataType.EVENT,getApplicationContext(),"News","NewsGetMore",null,null,getLocalClassName());
                         ApiServices.getNews(C.NEWS_PER_REQUEST, offset);
                     }
                 }

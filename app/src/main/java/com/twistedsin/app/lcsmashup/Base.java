@@ -3,7 +3,12 @@ package com.twistedsin.app.lcsmashup;
 import android.app.Application;
 import android.content.Context;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+
 import com.twistedsin.app.lcsmashup.caching.Cache;
+
+import java.util.HashMap;
 
 /**
  * Created by Filipe Oliveira on 01-09-2014.
@@ -41,5 +46,6 @@ public class Base extends Application {
         Cache.initCache(Base.this);
         inited=true;
     }
+
 
   }

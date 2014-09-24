@@ -138,17 +138,43 @@
     </ScrollView>
 
 
+    <RelativeLayout
+        android:id="@+id/activity_game_no_games_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
 
         <TextView
             android:id="@+id/activity_game_no_games"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:clickable="true"
-            android:background="@drawable/sl_sliding_menu_option"
+            android:layout_centerInParent="true"
             android:textColor="@color/body_text_1"
             android:text="This game will be played on"
             android:visibility="invisible" />
+
+
+        <RelativeLayout
+            android:id="@+id/activity_game_notifyme_layout"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/activity_game_no_games"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+            <TextView
+                android:id="@+id/activity_game_no_games_notifyme_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:clickable="true"
+                android:background="@drawable/sl_sliding_menu_option"
+                android:textColor="@color/body_text_1"
+                android:textSize="18sp"
+                android:layout_centerInParent="true"
+                android:text="Notify me when this game starts"/>
+            </RelativeLayout>
+
+        </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/activity_game_loadinglayout"

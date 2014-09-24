@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ga_logLevel">verbose</string>
+
+    <integer name="ga_dispatchPeriod">30</integer>
+
+    <bool name="ga_dryRun">false</bool>
+
+    <!-- The screen names that will appear in reports -->
+    <screenName name="com.twistedsin.app.lcsmashup.activities.ActivityDashboard">
+        Activity Dashboard Global
+    </screenName>
+
+    <screenName name="com.twistedsin.app.lcsmashup.activities.ActivityAbout">
+        Activity About
+    </screenName>
+
+</resources>

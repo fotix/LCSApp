@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import com.twistedsin.app.lcsmashup.C;
 import com.twistedsin.app.lcsmashup.R;
+import com.twistedsin.app.lcsmashup.analytics.DataType;
+import com.twistedsin.app.lcsmashup.analytics.GATracker;
 import com.twistedsin.app.lcsmashup.fragments.FragmentScheduleBar;
 import com.twistedsin.app.lcsmashup.fragments.FragmentScheduleDay;
 
@@ -30,6 +32,9 @@ public class ActivitySchedule extends BaseActivity implements FragmentScheduleBa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
+
+        //Sending GA Screen Event
+        GATracker.getInstance().sendAnalyticsData(DataType.SCREEN,getApplicationContext(),getLocalClassName());
 
         fDay = (FragmentScheduleDay) getFragmentManager().findFragmentById(R.id.fragment_list);
 

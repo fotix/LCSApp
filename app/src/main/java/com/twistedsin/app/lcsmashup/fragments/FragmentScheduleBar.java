@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.twistedsin.app.lcsmashup.R;
+import com.twistedsin.app.lcsmashup.analytics.DataType;
+import com.twistedsin.app.lcsmashup.analytics.GATracker;
 
 /**
  * Created by Filipe Oliveira on 09-07-2014.
@@ -36,16 +38,20 @@ public class FragmentScheduleBar extends Fragment{
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isLoading)
+                if(!isLoading) {
+                    GATracker.getInstance().sendAnalyticsData(DataType.EVENT,getActivity().getBaseContext(),"ScheduleScreen","DayPrevious",null,null,"FragmentScheduleBar");
                     mDateListener.onPreviousDay();
+                }
             }
         });
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isLoading)
+                if(!isLoading) {
+                    GATracker.getInstance().sendAnalyticsData(DataType.EVENT,getActivity().getBaseContext(),"ScheduleScreen","DayNext",null,null,"FragmentScheduleBar");
                     mDateListener.onNextDay();
+                }
             }
         });
 

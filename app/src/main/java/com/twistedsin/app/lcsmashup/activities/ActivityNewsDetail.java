@@ -20,12 +20,17 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 import com.twistedsin.app.api.models.News.News;
+import com.twistedsin.app.lcsmashup.Base;
 import com.twistedsin.app.lcsmashup.C;
 import com.twistedsin.app.lcsmashup.R;
 
 import com.manuelpeinado.fadingactionbar.FadingActionBarHelper;
+import com.twistedsin.app.lcsmashup.analytics.DataType;
+import com.twistedsin.app.lcsmashup.analytics.GATracker;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -53,6 +58,9 @@ public class ActivityNewsDetail extends Activity {
 
 //
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+
+        //Sending GA Screen Event
+        GATracker.getInstance().sendAnalyticsData(DataType.SCREEN, getApplicationContext(), getLocalClassName());
 
 //        ActionBar actionBar = getActionBar();
 //        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33222222")));

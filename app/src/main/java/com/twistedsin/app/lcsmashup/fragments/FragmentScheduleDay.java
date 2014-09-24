@@ -13,6 +13,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.otto.Subscribe;
 import com.twistedsin.app.api.messages.EventBusManager;
 import com.twistedsin.app.api.models.Match.Match;
@@ -22,12 +24,15 @@ import com.twistedsin.app.api.responses.MatchResponseNotification;
 import com.twistedsin.app.api.responses.ProgrammingBlockResponseNotification;
 import com.twistedsin.app.api.responses.ProgrammingWeekResponseNotification;
 import com.twistedsin.app.api.services.ApiServices;
+import com.twistedsin.app.lcsmashup.Base;
 import com.twistedsin.app.lcsmashup.C;
 import com.twistedsin.app.lcsmashup.R;
 import com.twistedsin.app.lcsmashup.Utils.TimeZones;
 import com.twistedsin.app.lcsmashup.activities.ActivityGame;
 import com.twistedsin.app.lcsmashup.activities.ActivitySchedule;
 import com.twistedsin.app.lcsmashup.adapters.AdapterSchedule;
+import com.twistedsin.app.lcsmashup.analytics.DataType;
+import com.twistedsin.app.lcsmashup.analytics.GATracker;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -83,6 +88,9 @@ public class FragmentScheduleDay extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_schedule_day, container, false);
 
+
+
+
         BlockList = new HashMap<String, ProgrammingBlock>();
         MatchList = new ArrayList<Match>();
         MatchIdList = new HashMap<String, Boolean>();
@@ -97,7 +105,7 @@ public class FragmentScheduleDay extends Fragment {
                 Intent i = new Intent(getActivity().getApplicationContext(), ActivityGame.class);
                 i.putExtra("gamenumber",1);
                 i.putExtra("index", position);
-
+                GATracker.getInstance().sendAnalyticsData(DataType.EVENT,getActivity().getBaseContext(),"ScheduleScreen",MatchList.get(position).getName(),null,null,"FragmentScheduleDay");
                 startActivity(i);
             }
         });
@@ -211,6 +219,9 @@ public class FragmentScheduleDay extends Fragment {
         if (p.getDays().get(0).getBlockNum() > 0) {
             loadingLayout.setVisibility(View.VISIBLE);
             noMatches.setVisibility(View.INVISIBLE);
+
+
+
             for (int i = 0; i < p.getDays().get(0).getBlockIds().size(); i++) {
                 String aux = ApiServices.getProgrammingBlock(p.getDays().get(0).getBlockIds().get(i));
                 BlockList.put(aux, new ProgrammingBlock());
@@ -234,11 +245,19 @@ public class FragmentScheduleDay extends Fragment {
                 checkLoadingState();
                 return;
             }
-            BlockList.put(p.getTournamentId(), p);
 
-            for (int i = 0; i < p.getMatches().size(); i++) {
-                lastRequest = ApiServices.getMatch(p.getMatches().get(i));
-                MatchIdList.put(lastRequest, false);
+            if(!p.getMatches().isEmpty()) {
+                BlockList.put(p.getTournamentId(), p);
+
+                for (int i = 0; i < p.getMatches().size(); i++) {
+                    lastRequest = ApiServices.getMatch(p.getMatches().get(i));
+                    MatchIdList.put(lastRequest, false);
+                }
+            }
+            else {
+                if(C.LOG_MODE) C.logW("No matches");
+                checkLoadingState();
+
             }
 
         }
@@ -301,7 +320,8 @@ public class FragmentScheduleDay extends Fragment {
         if (m != null) {
             if(C.LOG_MODE) C.logW( m.getName() + "    " + m.getMatchId() + "   " + m.getResult().get("game0").getId());
 
-            m.setColor(BlockList.get(m.getTournament().getId()).getLeagueColor());
+            if(BlockList.get(m.getTournament().getId()) != null)
+                m.setColor(BlockList.get(m.getTournament().getId()).getLeagueColor());
 
 
             MatchList.add(m);
